@@ -4,7 +4,7 @@
 <section class="hero">
   <div class="wrap">
     <h1>Altın, gümüş ve döviz fiyatları</h1>
-    <p class="lede">Fiyatlar her saat başı otomatik güncellenir. Son güncelleme: <time datetime="{{ updated_iso }}">{{ updated_h }}</time> (Türkiye saati)</p>
+    <p class="lede"><span class="live-dot" aria-hidden="true"></span>Fiyatlar her saat başı otomatik güncellenir. Son güncelleme: <time datetime="{{ updated_iso }}">{{ updated_h }}</time> (Türkiye saati)</p>
   </div>
 </section>
 
@@ -26,18 +26,29 @@
     {% endfor %}
   </div>
   <p class="fine">Günlük ve haftalık değişimler, sitenin kendi kayıtlarına göre hesaplanır. Yeni kurulan sitede kayıt biriktikçe görünür.</p>
+  <ul class="trust" aria-label="Güvenilirlik bilgisi">
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2" stroke-linecap="round" stroke-linejoin="round"/></svg>Saatlik otomatik güncelleme</li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 4.5-3.2 7.7-8 9-4.8-1.3-8-4.5-8-9V7l8-4z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>TCMB ve uluslararası piyasa verisi</li>
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 16.5h.01" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/></svg>Yatırım tavsiyesi değil, sadece hesaplama</li>
+  </ul>
 </section>
 
 <div class="wrap">{{ ad('top') }}</div>
 
-<section class="wrap block">
+<section class="wrap block reveal">
   <a class="feature" href="{{ u('/para-rehberi/') }}">
+    <span class="feature-tag">Öne çıkan</span>
     <strong>Para Rehberi: paran bir yılda ne kadar değer kaybeder?</strong>
-    <span>Enflasyon, mevduat faizi ve kredi kartı borcunu resmi kaynaklı rakamlarla kendin hesapla.</span>
+    <span class="feature-desc">Enflasyon, mevduat faizi ve kredi kartı borcunu resmi kaynaklı rakamlarla kendin hesapla.</span>
+    <span class="feature-stats">
+      <span class="fstat"><b>%{{ facts.inflation.value|tr(2) }}</b>Yıllık enflasyon <i>TÜİK, {{ facts.inflation.label }}</i></span>
+      <span class="fstat"><b>%{{ facts.policy.value|tr(0) }}</b>Politika faizi <i>TCMB, {{ facts.policy.label }}</i></span>
+    </span>
+    <span class="feature-cta">Hesaplamaya başla →</span>
   </a>
 </section>
 
-<section class="wrap block" aria-labelledby="araclar-h">
+<section class="wrap block reveal" aria-labelledby="araclar-h">
   <h2 id="araclar-h">Hesaplama araçları</h2>
   <div class="tools">
     {% for t in tools %}
@@ -46,7 +57,7 @@
   </div>
 </section>
 
-<section class="wrap block prose" aria-labelledby="nasil-h">
+<section class="wrap block prose reveal" aria-labelledby="nasil-h">
   <h2 id="nasil-h">Fiyatlar nasıl hesaplanıyor?</h2>
   <p>Gram altın; uluslararası ons altın fiyatının gram ve Türk lirası karşılığından hesaplanır. Çeyrek, yarım ve tam altın ile 14, 18 ve 22 ayar altın fiyatları, has altın fiyatı üzerinden ağırlık ve saflık oranıyla türetilir. Dolar, euro ve sterlin için Türkiye Cumhuriyet Merkez Bankası kurları kullanılır.</p>
   <p>Kuyumcularda ve bankalarda görülen satış fiyatları; alış-satış farkı ve işçilik nedeniyle burada gösterilen değerden yüksek olabilir. Alım satım öncesinde güncel fiyatı işlem yapacağınız kurumdan teyit etmenizi öneririz.</p>

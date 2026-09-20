@@ -315,6 +315,7 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
                       autoescape=select_autoescape(["html", "xml"]), trim_blocks=True, lstrip_blocks=True)
     env.filters["tr"] = tr
     env.filters["pct"] = pct_s
+    env.filters["date_tr"] = date_tr
 
     items = {}
     for a in ASSETS:
@@ -362,11 +363,12 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
         return {"@context": "https://schema.org", "@graph": graph}
 
     # Ana sayfa
+    facts = json.loads((ROOT / "data" / "facts.json").read_text("utf-8"))
     gram = items["gram-altin"]
     title = f"Altın Fiyatları, Gram Altın, Çeyrek Altın, Dolar ve Euro | {cfg['site_name']}"
     desc = (f"Gram altın {tr(gram['price'])} TL. Çeyrek altın, gümüş, dolar ve euro fiyatları her saat otomatik güncellenir; "
             f"grafik, geçmiş fiyatlar ve hesaplama araçları.")
-    page("/", "index.html", title=title, description=desc, home=items,
+    page("/", "index.html", title=title, description=desc, home=items, facts=facts,
          jsonld=ld_graph("/", title, desc, [("Ana sayfa", "/")]))
 
     # Varlık sayfaları
@@ -406,7 +408,6 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
              jsonld=ld_graph(path, ttl, dsc, [("Ana sayfa", "/"), (t["name"], path)]))
 
     # Para Rehberi (kaynaklı, elle yazılmış içerik sayfası; rakamlar data/facts.json'dan gelir)
-    facts = json.loads((ROOT / "data" / "facts.json").read_text("utf-8"))
     age = (today - datetime.strptime(facts["checked"], "%Y-%m-%d").date()).days
     if age > 45:
         print(f"::warning::data/facts.json {age} gün önce kontrol edildi; Para Rehberi rakamlarını güncelleyin.")
