@@ -1,0 +1,10 @@
+{% extends "page.html" %}
+{% block content %}
+<h1>Hakkında ve yasal uyarı</h1>
+<p>{{ cfg.site_name }}, altın, gümüş ve döviz fiyatlarını ücretsiz ve sade biçimde takip etmeniz için hazırlanmış bir bilgi sitesidir. Fiyatlar her saat başı otomatik olarak güncellenir.</p>
+<h2>Veri kaynakları ve yöntem</h2>
+<p>Ons altın ve ons gümüş fiyatları uluslararası piyasa veri sağlayıcılarından, dolar, euro ve sterlin kurları Türkiye Cumhuriyet Merkez Bankası'nın yayımladığı döviz satış kurlarından alınır. Gram altın; ons fiyatının gram ve Türk lirası karşılığı olarak hesaplanır. Çeyrek, yarım, tam ve ayarlı altın fiyatları, has altın fiyatından ağırlık ve saflık oranıyla türetilir.</p>
+<h2>Yasal uyarı</h2>
+<p>Bu sitede yer alan bilgiler yalnızca genel bilgilendirme amaçlıdır ve yatırım danışmanlığı kapsamında değildir. Gösterilen fiyatlar hesaplanmış göstergedir; kuyumcu, banka, kuyumcu borsası veya döviz bürolarının uyguladığı alış-satış fiyatlarından farklı olabilir. Fiyatların doğruluğu, eksiksizliği veya kesintisiz erişilebilirliği garanti edilmez. Bu bilgilere dayanarak yapılan işlemlerden doğabilecek zararlardan site sorumlu tutulamaz. Yatırım kararlarınızı vermeden önce yetkili kurumlardan güncel fiyat teyidi alın.</p>
+<p>İletişim için <a href="{{ u('/iletisim/') }}">iletişim sayfamızı</a> kullanabilirsiniz.</p>
+{% endblock %}

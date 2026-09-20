@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% from "macros.html" import ad, chg, affiliates with context %}
+{% block main %}
+<section class="hero">
+  <div class="wrap">
+    <h1>Altın, gümüş ve döviz fiyatları</h1>
+    <p class="lede">Fiyatlar her saat başı otomatik güncellenir. Son güncelleme: <time datetime="{{ updated_iso }}">{{ updated_h }}</time> (Türkiye saati)</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="board" role="table" aria-label="Güncel fiyatlar">
+    <div class="board-head" role="row">
+      <span role="columnheader">Ürün</span><span role="columnheader">Fiyat</span><span role="columnheader">Günlük</span><span role="columnheader" class="b-7d">Haftalık</span>
+    </div>
+    {% for grp in groups %}
+    <div class="board-group" role="rowgroup">{{ grp.name }}</div>
+    {% for a in grp['items'] %}
+    <a class="board-row" role="row" href="{{ u('/' ~ a.slug ~ '/') }}">
+      <span class="b-name" role="cell">{{ a.name }}</span>
+      <span class="b-price" role="cell">{{ a.price|tr(a.dec) }} <small>{{ a.unit }}</small></span>
+      <span class="b-1d" role="cell">{{ chg(a.st.d1) }}</span>
+      <span class="b-7d" role="cell">{{ chg(a.st.d7) }}</span>
+    </a>
+    {% endfor %}
+    {% endfor %}
+  </div>
+  <p class="fine">Günlük ve haftalık değişimler, sitenin kendi kayıtlarına göre hesaplanır. Yeni kurulan sitede kayıt biriktikçe görünür.</p>
+</section>
+
+<div class="wrap">{{ ad('top') }}</div>
+
+<section class="wrap block">
+  <a class="feature" href="{{ u('/para-rehberi/') }}">
+    <strong>Para Rehberi: paran bir yılda ne kadar değer kaybeder?</strong>
+    <span>Enflasyon, mevduat faizi ve kredi kartı borcunu resmi kaynaklı rakamlarla kendin hesapla.</span>
+  </a>
+</section>
+
+<section class="wrap block" aria-labelledby="araclar-h">
+  <h2 id="araclar-h">Hesaplama araçları</h2>
+  <div class="tools">
+    {% for t in tools %}
+    <a class="tool" href="{{ u('/' ~ t.slug ~ '/') }}"><strong>{{ t.name }}</strong><span>{{ t.short }}</span></a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="wrap block prose" aria-labelledby="nasil-h">
+  <h2 id="nasil-h">Fiyatlar nasıl hesaplanıyor?</h2>
+  <p>Gram altın; uluslararası ons altın fiyatının gram ve Türk lirası karşılığından hesaplanır. Çeyrek, yarım ve tam altın ile 14, 18 ve 22 ayar altın fiyatları, has altın fiyatı üzerinden ağırlık ve saflık oranıyla türetilir. Dolar, euro ve sterlin için Türkiye Cumhuriyet Merkez Bankası kurları kullanılır.</p>
+  <p>Kuyumcularda ve bankalarda görülen satış fiyatları; alış-satış farkı ve işçilik nedeniyle burada gösterilen değerden yüksek olabilir. Alım satım öncesinde güncel fiyatı işlem yapacağınız kurumdan teyit etmenizi öneririz.</p>
+</section>
+
+<div class="wrap">{{ ad('bottom') }}</div>
+{{ affiliates() }}
+{% endblock %}

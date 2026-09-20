@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "macros.html" import ad, affiliates with context %}
+{% block main %}
+<section class="hero hero-asset">
+  <div class="wrap">
+    <p class="crumbs"><a href="{{ u('/') }}">Ana sayfa</a> / {{ tool.name }}</p>
+    <h1>Döviz Çevirici</h1>
+    <p class="lede">TL, dolar, euro, sterlin, gram altın ve gümüş arasında çeviri yap. Fiyatlar {{ updated_h }} itibarıyla günceldir.</p>
+  </div>
+</section>
+
+<section class="wrap block">
+  <div class="calc">
+    <label for="c-amt">Miktar</label>
+    <input id="c-amt" inputmode="decimal" autocomplete="off" value="100">
+    <label for="c-from">Çevrilecek birim</label>
+    <select id="c-from"></select>
+    <button type="button" id="c-swap" class="btn">Yer değiştir</button>
+    <label for="c-to">Çevrilen birim</label>
+    <select id="c-to"></select>
+    <p class="result"><span id="c-out">–</span> <span id="c-unit"></span></p>
+    <p class="fine" id="c-rate"></p>
+  </div>
+</section>
+
+<div class="wrap">{{ ad('middle') }}</div>
+
+<section class="wrap block prose">
+  <h2>Güncel kurlar</h2>
+  <ul class="pills">
+    <li><a href="{{ u('/dolar/') }}">Dolar <b>{{ items['dolar'].price|tr(4) }}</b></a></li>
+    <li><a href="{{ u('/euro/') }}">Euro <b>{{ items['euro'].price|tr(4) }}</b></a></li>
+    <li><a href="{{ u('/sterlin/') }}">Sterlin <b>{{ items['sterlin'].price|tr(4) }}</b></a></li>
+    <li><a href="{{ u('/gram-altin/') }}">Gram altın <b>{{ items['gram-altin'].price|tr(2) }}</b></a></li>
+  </ul>
+  <p>Kurlar Türkiye Cumhuriyet Merkez Bankası döviz satış kurlarına dayanır. Banka ve döviz bürolarında uygulanan alış-satış farkı bu hesaplamaya dahil değildir.</p>
+</section>
+{{ affiliates() }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
+  var T=window.TR, R={{ rates|tojson }};
+  var NAMES={'TRY':'Türk lirası (TL)','dolar':'Dolar (USD)','euro':'Euro (EUR)','sterlin':'Sterlin (GBP)','gram-altin':'Gram altın','ceyrek-altin':'Çeyrek altın','yarim-altin':'Yarım altın','tam-altin':'Tam altın','gumus':'Gümüş (gram)'};
+  var from=document.getElementById('c-from'),to=document.getElementById('c-to'),amt=document.getElementById('c-amt');
+  Object.keys(NAMES).forEach(function(k){[from,to].forEach(function(s){var o=document.createElement('option');o.value=k;o.textContent=NAMES[k];s.appendChild(o);});});
+  from.value='dolar';to.value='TRY';
+  function run(){
+    var a=T.parse(amt.value),f=R[from.value],t=R[to.value];
+    document.getElementById('c-out').textContent=isFinite(a)?T.fmt(a*f/t,t===1?2:4):'–';
+    document.getElementById('c-unit').textContent=NAMES[to.value];
+    document.getElementById('c-rate').textContent='1 '+NAMES[from.value]+' = '+T.fmt(f/t,4)+' '+NAMES[to.value];
+  }
+  [amt,from,to].forEach(function(e){e.addEventListener('input',run)});
+  document.getElementById('c-swap').addEventListener('click',function(){var x=from.value;from.value=to.value;to.value=x;run();});
+  run();
+})();
+</script>
+{% endblock %}

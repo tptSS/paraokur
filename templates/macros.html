@@ -1,0 +1,23 @@
+{% macro ad(slot) -%}
+{%- if cfg.adsense_client and cfg.ad_slots.get(slot) -%}
+<div class="ad" aria-label="Reklam"><ins class="adsbygoogle" style="display:block" data-ad-client="{{ cfg.adsense_client }}" data-ad-slot="{{ cfg.ad_slots[slot] }}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
+{%- endif -%}
+{%- endmacro %}
+
+{% macro chg(v) -%}
+{%- if v is none -%}<span class="chg flat">–</span>{%- else -%}<span class="chg {{ 'up' if v > 0.005 else ('down' if v < -0.005 else 'flat') }}">{{ v|pct }}</span>{%- endif -%}
+{%- endmacro %}
+
+{% macro affiliates() -%}
+{%- if cfg.affiliate_links -%}
+<section class="wrap block" aria-labelledby="aff-h">
+  <h2 id="aff-h">Faydalı bağlantılar</h2>
+  <ul class="aff">
+  {% for l in cfg.affiliate_links %}
+    <li><a href="{{ l.url }}" rel="sponsored noopener" target="_blank">{{ l.label }}</a>{% if l.note %}<span>{{ l.note }}</span>{% endif %}</li>
+  {% endfor %}
+  </ul>
+  <p class="fine">Bu bağlantılar üzerinden yapılan işlemlerden komisyon kazanabiliriz.</p>
+</section>
+{%- endif -%}
+{%- endmacro %}

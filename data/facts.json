@@ -1,0 +1,21 @@
+{
+  "checked": "2026-09-20",
+  "inflation": { "value": 31.51, "label": "Ağustos 2026" },
+  "policy": { "value": 37, "label": "10 Eylül 2026" },
+  "credit_card": {
+    "as_of": "1 Eylül 2026",
+    "tiers": [
+      { "label": "Dönem borcu 30.000 TL altı", "rate": 3.25 },
+      { "label": "30.000 - 180.000 TL", "rate": 3.75 },
+      { "label": "180.000 TL üstü, nakit avans, KMH", "rate": 4.25 }
+    ],
+    "restructure": 3.11
+  },
+  "stopaj": [
+    { "upto_days": 183, "rate": 17.5 },
+    { "upto_days": 366, "rate": 15 },
+    { "upto_days": null, "rate": 10 }
+  ],
+  "stopaj_valid_until": "31.12.2026",
+  "tmsf_limit": 1200000
+}

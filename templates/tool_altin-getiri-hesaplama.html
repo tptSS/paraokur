@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "macros.html" import ad, affiliates with context %}
+{% block main %}
+<section class="hero hero-asset">
+  <div class="wrap">
+    <p class="crumbs"><a href="{{ u('/') }}">Ana sayfa</a> / {{ tool.name }}</p>
+    <h1>Altın ve Döviz Kâr / Zarar Hesaplama</h1>
+    <p class="lede">Aldığın fiyatı gir; güncel değeri, kâr veya zararı ve yüzde getiriyi gör. Fiyatlar {{ updated_h }} itibarıyla günceldir.</p>
+  </div>
+</section>
+
+<section class="wrap block">
+  <div class="calc">
+    <label for="g-type">Ürün</label>
+    <select id="g-type">
+      {% for s in ['gram-altin','ceyrek-altin','yarim-altin','tam-altin','22-ayar-altin','gumus','dolar','euro','sterlin'] %}
+      <option value="{{ items[s].price }}" data-qty="{{ items[s].qty }}" data-dec="{{ items[s].dec }}">{{ items[s].name }}</option>
+      {% endfor %}
+    </select>
+    <label for="g-qty">Miktar</label>
+    <input id="g-qty" inputmode="decimal" autocomplete="off" value="10">
+    <label for="g-buy">Alış fiyatı (birim başına, TL)</label>
+    <input id="g-buy" inputmode="decimal" autocomplete="off" placeholder="örn. 3.100">
+    <dl class="stats result-grid">
+      <div><dt>Toplam maliyet</dt><dd id="g-cost">–</dd></div>
+      <div><dt>Güncel değer</dt><dd id="g-val">–</dd></div>
+      <div><dt>Kâr / zarar</dt><dd id="g-pl">–</dd></div>
+      <div><dt>Getiri</dt><dd id="g-pct">–</dd></div>
+    </dl>
+    <p class="fine" id="g-now"></p>
+  </div>
+</section>
+
+<div class="wrap">{{ ad('middle') }}</div>
+
+<section class="wrap block prose">
+  <h2>Nasıl hesaplanır?</h2>
+  <p>Toplam maliyet, miktar ile alış fiyatının çarpımıdır. Güncel değer, miktarın bu sitedeki güncel fiyatla çarpılmasıyla bulunur. Aradaki fark kâr ya da zarardır. Kuyumcu işçiliği, komisyon ve alış-satış farkı hesaba katılmaz; gerçek elde edeceğiniz tutar bu nedenle daha düşük olabilir.</p>
+</section>
+{{ affiliates() }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
+  var T=window.TR,$=function(i){return document.getElementById(i)};
+  function run(){
+    var s=$('g-type'),o=s.options[s.selectedIndex],p=+s.value,dec=+o.getAttribute('data-dec');
+    var q=T.parse($('g-qty').value),b=T.parse($('g-buy').value);
+    $('g-now').textContent='Güncel fiyat: '+T.fmt(p,dec)+' TL / '+o.getAttribute('data-qty');
+    if(!isFinite(q)||!isFinite(b)||b<=0){['g-cost','g-val','g-pl','g-pct'].forEach(function(i){$(i).textContent='–';$(i).className='';});$('g-val').textContent=isFinite(q)?T.fmt(p*q,2)+' TL':'–';return;}
+    var cost=q*b,val=q*p,pl=val-cost,pc=pl/cost*100,cls=pl>0?'up':(pl<0?'down':'');
+    $('g-cost').textContent=T.fmt(cost,2)+' TL';$('g-val').textContent=T.fmt(val,2)+' TL';
+    $('g-pl').textContent=(pl>0?'+':'')+T.fmt(pl,2)+' TL';$('g-pct').textContent=(pc>0?'+':'')+T.fmt(pc,2)+'%';
+    $('g-pl').className=cls;$('g-pct').className=cls;
+  }
+  ['g-type','g-qty','g-buy'].forEach(function(i){$(i).addEventListener('input',run)});
+  run();
+})();
+</script>
+{% endblock %}

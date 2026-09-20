@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para Rehberi: Enflasyon, Faiz ve Borç | __SITE_NAME__</title>
+<link rel="canonical" href="__CANONICAL__">
+<meta property="og:title" content="Para Rehberi: Enflasyon, Faiz ve Borç">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<link rel="icon" href="__BASE__/assets/favicon.svg" type="image/svg+xml">
+__HEAD_EXTRA__
+<meta name="description" content="Paranın alım gücü bir yılda ne olur? Mevduat faizi enflasyonu yener mi? Kredi kartı borcu gerçekte ne kadar tutar? Resmi kaynaklı rakamlarla hesapla.">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#eef1ef; --card:#ffffff; --ink:#15211d; --mute:#57675f; --line:#d5ddd8;
+  --deep:#0f1f1a; --deep2:#16302a; --amber:#f2c14e; --amber-ink:#7a5a05;
+  --good:#17804f; --bad:#c23b32; --good-bg:#e3f4ea; --bad-bg:#fbe7e5; --chip:#e6ece8;
+  --hatch:rgba(255,255,255,.09);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1310; --card:#12221c; --ink:#e8f0ea; --mute:#94a99e; --line:#24413a;
+    --amber-ink:#f2c14e; --good:#62d69c; --bad:#ff8f86; --good-bg:#12362a; --bad-bg:#3a1c1a; --chip:#1a3029;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1310; --card:#12221c; --ink:#e8f0ea; --mute:#94a99e; --line:#24413a;
+  --amber-ink:#f2c14e; --good:#62d69c; --bad:#ff8f86; --good-bg:#12362a; --bad-bg:#3a1c1a; --chip:#1a3029;
+}
+html{background:#0f1f1a;height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font:400 17px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-variant-numeric:tabular-nums}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+a{color:inherit}
+:focus-visible{outline:3px solid #3b8cff;outline-offset:2px;border-radius:4px}
+h1,h2,h3{line-height:1.2;margin:0}
+input,select,button{font:inherit;color:inherit}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);min-width:0}
+label{display:block;font-size:.86rem;color:var(--mute);margin:0 0 5px}
+
+/* HERO */
+.hero{background:var(--deep);color:#e9f0eb;padding:22px 0 30px}
+.hero .top{font-weight:800;color:var(--amber);font-size:1.05rem;margin:0 0 22px}
+.hero h1{font-size:clamp(1.65rem,5.4vw,2.6rem);letter-spacing:-.4px;max-width:20ch}
+.lede{color:#b9c9be;margin:12px 0 0;max-width:52ch;font-size:1rem}
+.melt{margin-top:26px;background:var(--deep2);border-radius:14px;padding:18px}
+.melt-top{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.melt label{color:#9fb4a7}
+.melt input[type=text]{background:#0f1f1a;border-color:#2b4a41;color:#fff}
+.melt output{color:var(--amber);font-weight:700;margin-left:6px}
+input[type=range]{padding:0;height:44px;accent-color:var(--amber);background:transparent;border:0}
+.bar{position:relative;height:64px;border-radius:10px;overflow:hidden;margin-top:14px;
+  background:repeating-linear-gradient(135deg,var(--hatch) 0 8px,transparent 8px 16px),#0f1f1a;border:1px solid #2b4a41}
+.bar-fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:linear-gradient(90deg,#d9a92f,var(--amber));
+  border-radius:0 10px 10px 0;transition:width 1.5s cubic-bezier(.2,.7,.1,1)}
+.bar.quick .bar-fill{transition-duration:.35s}
+.bar-tag{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:#2a1f00;font-size:1.15rem;z-index:1}
+.melt-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.melt-nums small{display:block;color:#9fb4a7;font-size:.78rem;line-height:1.3}
+.melt-nums strong{display:block;font-size:clamp(1.05rem,4.2vw,1.5rem);color:#fff}
+.melt-nums .loss{color:#ff9d94}
+.assump{font-size:.85rem;color:#9fb4a7;margin:16px 0 0}
+.assump input{display:inline-block;width:5.2em;padding:5px 8px;margin:0 3px;background:#0f1f1a;border-color:#2b4a41;color:#fff}
+.linkbtn{background:none;border:0;padding:0;color:var(--amber);text-decoration:underline;cursor:pointer;font-size:.85rem}
+
+/* BÖLÜMLER */
+section.blk{padding:38px 0 0}
+section.blk h2{font-size:1.5rem;letter-spacing:-.2px}
+section.blk>.wrap>p.sub{color:var(--mute);margin:8px 0 0;max-width:60ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:.9rem;min-height:40px}
+.chip[aria-pressed="true"]{background:var(--deep);color:var(--amber);border-color:var(--deep)}
+.stat{background:var(--chip);border-radius:10px;padding:12px 14px}
+.stat small{display:block;color:var(--mute);font-size:.8rem;line-height:1.3}
+.stat strong{font-size:1.2rem;display:block;margin-top:2px}
+.stat.hi{background:var(--deep);color:#fff}
+.stat.hi small{color:#9fb4a7} .stat.hi strong{color:var(--amber)}
+.compare{margin-top:18px;display:grid;gap:10px}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;font-size:.92rem}
+.crow .track{grid-column:1 / -1;height:16px;border-radius:8px;background:var(--chip);overflow:hidden}
+.crow .fill{height:100%;width:0;border-radius:8px;background:var(--deep);transition:width .9s cubic-bezier(.2,.7,.1,1)}
+.crow .fill.amber{background:var(--amber)} .crow .fill.red{background:var(--bad)} .crow .fill.green{background:var(--good)}
+.crow b{font-variant-numeric:tabular-nums}
+.verdict{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-weight:600}
+.verdict.good{background:var(--good-bg);color:var(--good)} .verdict.bad{background:var(--bad-bg);color:var(--bad)}
+.note{color:var(--mute);font-size:.86rem;margin:12px 0 0}
+.form3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.src{display:inline-block;font-size:.76rem;border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin-left:6px;text-decoration:none;color:var(--mute);vertical-align:middle;white-space:nowrap}
+.src:hover{color:var(--ink);border-color:var(--mute)}
+
+/* Karşılaştırma kartları */
+.inst{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+.inst details{background:var(--card);border:1px solid var(--line);border-radius:12px}
+.inst summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;min-height:48px}
+.inst summary::-webkit-details-marker{display:none}
+.inst summary strong{font-size:1.02rem}
+.tags{display:flex;gap:6px;flex-wrap:wrap;grid-column:1 / -1}
+.tag{font-size:.76rem;padding:2px 9px;border-radius:999px;background:var(--chip);color:var(--mute)}
+.tag.yes{background:var(--good-bg);color:var(--good)} .tag.no{background:var(--bad-bg);color:var(--bad)}
+.inst summary::after{content:"+";font-size:1.4rem;color:var(--mute);grid-row:1;grid-column:2;transition:transform .2s}
+.inst details[open] summary::after{transform:rotate(45deg)}
+.inst dl{margin:0;padding:0 16px 14px;display:grid;gap:10px}
+.inst dt{font-size:.8rem;color:var(--mute)} .inst dd{margin:0}
+.empty{display:none;color:var(--mute);margin-top:12px}
+
+/* Kaynaklar */
+.tablewrap{overflow-x:auto;margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-size:.8rem;color:var(--mute);font-weight:600}
+tbody tr:last-child td{border-bottom:0}
+footer{margin-top:44px;background:var(--deep);color:#b9c9be;padding:26px 0 30px;font-size:.9rem}
+footer p{margin:0 0 10px;max-width:70ch}
+footer strong{color:#fff}
+@media (max-width:520px){
+  body{font-size:16px}
+  .melt-top{grid-template-columns:1fr}
+  .melt-nums{grid-template-columns:1fr 1fr}
+  .melt-nums div:first-child{grid-column:1 / -1}
+}
+@media (prefers-reduced-motion:reduce){
+  .bar-fill,.crow .fill{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="top"><a href="__BASE__/" style="text-decoration:none">__SITE_NAME__</a> Para Rehberi</p>
+    <h1>Bankadaki paran bir yılda ne kadar değer kaybeder?</h1>
+    <p class="lede">Rakamları biz uydurmuyoruz. Her rakam resmi bir kurumdan geliyor ve kaynağı yanında yazıyor.</p>
+
+    <div class="melt">
+      <div class="melt-top">
+        <div>
+          <label for="amt">Paran (TL)</label>
+          <input id="amt" type="text" inputmode="decimal" value="100.000" autocomplete="off">
+        </div>
+        <div>
+          <label for="mo">Süre <output id="mo-out">12 ay</output></label>
+          <input id="mo" type="range" min="0" max="24" value="12">
+        </div>
+      </div>
+      <div class="bar" id="bar" role="img" aria-label="Paranın alım gücü grafiği">
+        <div class="bar-fill" id="fill"></div>
+        <span class="bar-tag" id="bar-tag">%100</span>
+      </div>
+      <div class="melt-nums">
+        <div><small>Bu süre sonunda paranın alım gücü</small><strong id="pp">–</strong></div>
+        <div><small>Bugünkü sepeti almak için gereken</small><strong id="need">–</strong></div>
+        <div><small>Kayıp</small><strong class="loss" id="loss">–</strong></div>
+      </div>
+      <p class="assump">
+        Varsayım: yıllık enflasyon <input id="infl" type="text" inputmode="decimal" value="" aria-label="Yıllık enflasyon varsayımı yüzde"> % düzeyinde sürer.
+        <span id="f-infl-note"></span>
+        <button class="linkbtn" id="infl-reset" type="button">Sıfırla</button>
+      </p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="blk" aria-labelledby="h-mevduat">
+  <div class="wrap">
+    <h2 id="h-mevduat">Mevduat faizi bu kaybı kapatır mı?</h2>
+    <p class="sub">Bankanın sana teklif ettiği faizi yaz. Vergiyi (stopaj) düşüp gerçekte eline geçeni ve enflasyona karşı durumunu gösterelim.
+      <a class="src" href="https://www.resmigazete.gov.tr/eskiler/2026/06/20260620-4.pdf" target="_blank" rel="noopener">Kaynak: Resmî Gazete</a></p>
+    <div class="card">
+      <div class="form3">
+        <div><label for="d-p">Yatıracağın tutar (TL)</label><input id="d-p" type="text" inputmode="decimal" value="100.000" autocomplete="off"></div>
+        <div><label for="d-r">Yıllık brüt faiz (%) <em>(örnek değer, kendi teklifini yaz)</em></label><input id="d-r" type="text" inputmode="decimal" value="40" autocomplete="off"></div>
+        <div><label for="d-d">Vade (gün)</label><input id="d-d" type="text" inputmode="numeric" value="32" autocomplete="off"></div>
+      </div>
+      <div class="chips" role="group" aria-label="Hızlı vade seçimi">
+        <button class="chip" type="button" data-d="32" aria-pressed="true">32 gün</button>
+        <button class="chip" type="button" data-d="90" aria-pressed="false">3 ay</button>
+        <button class="chip" type="button" data-d="180" aria-pressed="false">6 ay</button>
+        <button class="chip" type="button" data-d="365" aria-pressed="false">1 yıl</button>
+      </div>
+
+      <div class="grid2" style="margin-top:16px">
+        <div class="stat"><small>Brüt faiz</small><strong id="o-gross">–</strong></div>
+        <div class="stat"><small id="o-taxl">Stopaj</small><strong id="o-tax">–</strong></div>
+        <div class="stat hi"><small>Eline geçen net faiz</small><strong id="o-net">–</strong></div>
+        <div class="stat"><small>Vade sonu toplam</small><strong id="o-end">–</strong></div>
+      </div>
+
+      <div class="compare" aria-live="polite">
+        <div class="crow"><span>Vade sonunda elindeki para</span><b id="c1-v">–</b><div class="track"><div class="fill amber" id="c1"></div></div></div>
+        <div class="crow"><span>Bugünkü sepeti aynen almak için gereken (varsayılan enflasyonla)</span><b id="c2-v">–</b><div class="track"><div class="fill red" id="c2"></div></div></div>
+      </div>
+      <p class="verdict" id="d-verdict"></p>
+      <p class="note">Bu bir tahmin değil, senin yazdığın rakamlarla yapılan bir hesap. Gelecekteki enflasyon farklı olabilir. Kişisel enflasyonun (kira, gıda gibi kendi harcamaların) resmi rakamdan farklı olabileceğini de unutma.</p>
+    </div>
+  </div>
+</section>
+
+<section class="blk" aria-labelledby="h-borc">
+  <div class="wrap">
+    <h2 id="h-borc">Kredi kartı borcu gerçekte ne kadara mal olur?</h2>
+    <p class="sub">Bankalar bu oranların üzerine çıkamaz, altında uygulayabilir. Kendi oranını ekstrenden kontrol et.
+      <a class="src" href="https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Istatistikler/Bankacilik+Verileri/Kredi_Karti_Islemlerinde_Uygulanacak_Azami_Faiz_Oranlari" target="_blank" rel="noopener">Kaynak: TCMB</a></p>
+    <div class="card">
+      <div class="form3">
+        <div><label for="k-p">Ödenmeyen borç (TL)</label><input id="k-p" type="text" inputmode="decimal" value="50.000" autocomplete="off"></div>
+        <div>
+          <label for="k-t">Aylık azami akdi faiz (<span id="f-cc-asof"></span>)</label>
+          <select id="k-t"></select>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:16px">
+        <div class="stat hi"><small>Bir ayda işleyen faiz (en fazla)</small><strong id="k-m">–</strong></div>
+        <div class="stat"><small>Yıllık eşdeğer maliyet (bileşik)</small><strong id="k-y">–</strong></div>
+      </div>
+      <div class="compare" id="k-cmp">
+        <div class="crow"><span>Kart borcunun yıllık eşdeğer maliyeti</span><b id="b1-v">–</b><div class="track"><div class="fill red" id="b1"></div></div></div>
+        <div class="crow"><span>TCMB politika faizi (bankalar arası referans, senin hesabın değil)
+          <a class="src" href="https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/PPK/PPK+Toplanti+Kararlari" target="_blank" rel="noopener">Kaynak</a></span><b id="b2-v">–</b><div class="track"><div class="fill" id="b2"></div></div></div>
+        <div class="crow"><span>Yıllık enflasyon (<span id="f-infl-label"></span>)
+          <a class="src" href="https://www.sbb.gov.tr/enflasyon/" target="_blank" rel="noopener">Kaynak</a></span><b id="b3-v">–</b><div class="track"><div class="fill amber" id="b3"></div></div></div>
+      </div>
+      <p class="verdict" id="k-verdict"></p>
+      <p class="note">Genel ilke, tavsiye değil: ödediğin faiz, biriktirerek kazanabileceğin net faizden yüksekse, borcu kapatmak matematiksel olarak daha çok tasarruf sağlar. Acil durumlar için elinde nakit bulundurmak da önemlidir; dengeyi kendi durumuna göre sen kurarsın.</p>
+    </div>
+  </div>
+</section>
+
+<section class="blk" aria-labelledby="h-nerede">
+  <div class="wrap">
+    <h2 id="h-nerede">Para nerede durabilir? Neler garanti, neler değil?</h2>
+    <p class="sub">Getiri vaadi vermeden, sadece kuralları karşılaştırıyoruz: devlet güvencesi var mı, değeri dalgalanır mı, kim denetler?</p>
+    <div class="chips" role="group" aria-label="Filtre">
+      <button class="chip" type="button" data-f="all" aria-pressed="true">Hepsi</button>
+      <button class="chip" type="button" data-f="tmsf" aria-pressed="false">Devlet güvencesi (TMSF) olanlar</button>
+      <button class="chip" type="button" data-f="vol" aria-pressed="false">Değeri dalgalananlar</button>
+    </div>
+    <ul class="inst" id="inst"></ul>
+    <p class="empty" id="inst-empty">Bu filtreyle eşleşen seçenek yok.</p>
+    <p class="note">TMSF güvencesi: Her bankada, kişi başına <span id="f-tmsf"></span> TL'ye kadar (anapara ve faiz toplamı).
+      <a class="src" href="https://www.tmsf.org.tr/tr/Tmsf/Finansman/mevduat.sss.guncel" target="_blank" rel="noopener">Kaynak: TMSF</a></p>
+  </div>
+</section>
+
+<section class="blk" aria-labelledby="h-kaynak">
+  <div class="wrap">
+    <h2 id="h-kaynak">Bu rakamlar nereden geliyor?</h2>
+    <p class="sub">Tek tek kontrol edebilesin diye hepsini listeledik. Kontrol tarihi: <span id="f-checked"></span>. <span id="f-stale"></span></p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Bilgi</th><th scope="col">Değer</th><th scope="col">Açıklama</th><th scope="col">Kaynak</th></tr></thead>
+        <tbody id="src-body"></tbody>
+      </table>
+    </div>
+    <p class="note">Bankaların güncel mevduat faizleri her gün değişir ve bankaya göre farklıdır. Bu yüzden bu sayfa banka bazlı faiz göstermez; teklifi bankadan alıp yukarıdaki hesaplayıcıya sen yazarsın.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Yasal uyarı:</strong> Bu sayfa genel bilgilendirme ve eğitim amaçlıdır; yatırım danışmanlığı değildir ve kişiye özel tavsiye içermez. Hesaplayıcılar senin yazdığın rakamlar ve belirtilen varsayımlarla çalışır, geleceği tahmin etmez. Karar vermeden önce ilgili kurumdan güncel bilgiyi teyit et.</p>
+    <p><a href="__BASE__/">Fiyat panosu</a> &nbsp; <a href="__BASE__/hakkinda/">Hakkında</a> &nbsp; <a href="__BASE__/gizlilik/">Gizlilik</a> &nbsp; <a href="__BASE__/iletisim/">İletişim</a></p>
+    <p>Yetkili kurumları doğrulamak için: <a href="https://www.spk.gov.tr" target="_blank" rel="noopener">SPK</a>, <a href="https://www.bddk.org.tr" target="_blank" rel="noopener">BDDK</a>.</p>
+  </div>
+</footer>
+
+<script>window.FACTS=__FACTS__;</script>
+<script>
+(function(){
+  'use strict';
+  var $=function(id){return document.getElementById(id)};
+  var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var F=window.FACTS, INFL_DEFAULT=F.inflation.value, POLICY=F.policy.value;
+  function trn(x){return String(x).replace('.',',')}
+  var CC_ASOF=F.credit_card.as_of;
+
+  function nf(d){return new Intl.NumberFormat('tr-TR',{minimumFractionDigits:d,maximumFractionDigits:d})}
+  var f0=nf(0), f1=nf(1), f2=nf(2);
+  function TL(n){return f0.format(Math.round(n))+' TL'}
+  function TL2(n){return f2.format(n)+' TL'}
+  function pct(n,d){return '%'+(d===0?f0:d===1?f1:f2).format(n)}
+  function parse(v){
+    v=String(v==null?'':v).replace(/[\s%]|TL/gi,'');
+    if(!v) return NaN;
+    if(v.indexOf(',')>-1) v=v.replace(/\./g,'').replace(',','.');
+    else if(/^\d{1,3}(\.\d{3})+$/.test(v)) v=v.replace(/\./g,'');
+    return parseFloat(v);
+  }
+
+  /* Sayı animasyonu */
+  function tween(el,to,fmt){
+    var from=el._v; el._v=to; el._k=(el._k||0)+1; var k=el._k;
+    if(RM||from==null||!isFinite(from)){el.textContent=fmt(to);return}
+    var t0=performance.now(), ms=600;
+    (function step(t){
+      if(el._k!==k) return;
+      var p=Math.min(1,(t-t0)/ms), e=1-Math.pow(1-p,3);
+      el.textContent=fmt(from+(to-from)*e);
+      if(p<1) requestAnimationFrame(step);
+    })(t0);
+  }
+
+  /* 1) Erime */
+  var first=true;
+  function hero(){
+    var A=parse($('amt').value), e=parse($('infl').value)/100, m=+$('mo').value;
+    $('mo-out').textContent=m+' ay';
+    if(!isFinite(A)||A<=0||!isFinite(e)||e<=-0.9) return;
+    var k=Math.pow(1+e,m/12), pp=A/k, need=A*k, share=100/k;
+    var bar=$('bar');
+    if(first){
+      $('fill').style.width='100%';
+      requestAnimationFrame(function(){requestAnimationFrame(function(){$('fill').style.width=share+'%'})});
+      first=false; setTimeout(function(){bar.classList.add('quick')},1700);
+    } else {
+      $('fill').style.width=share+'%';
+    }
+    tween($('bar-tag'),share,function(v){return pct(v,0)});
+    tween($('pp'),pp,TL); tween($('need'),need,TL); tween($('loss'),A-pp,function(v){return '-'+TL(v)});
+    bar.setAttribute('aria-label','Paranın alım gücü yaklaşık '+pct(share,0)+' olur');
+  }
+  ['amt','infl'].forEach(function(id){$(id).addEventListener('input',function(){hero();deposit();debt()})});
+  $('mo').addEventListener('input',hero);
+  $('infl-reset').addEventListener('click',function(){$('infl').value='31,51';hero();deposit();debt()});
+  function infl(){var v=parse($('infl').value); return isFinite(v)?v:INFL_DEFAULT}
+
+  /* 2) Mevduat */
+  function stopaj(d){
+    for(var i=0;i<F.stopaj.length;i++){var t=F.stopaj[i]; if(t.upto_days==null||d<=t.upto_days) return t.rate/100}
+    return F.stopaj[F.stopaj.length-1].rate/100;
+  }
+  var depNetAnnual=null;
+  function deposit(){
+    var P=parse($('d-p').value), r=parse($('d-r').value), d=Math.round(parse($('d-d').value));
+    var v=$('d-verdict');
+    if(!isFinite(P)||P<=0||!isFinite(r)||r<0||!isFinite(d)||d<1){v.className='verdict';v.textContent='Geçerli bir tutar, faiz ve vade yaz.';depNetAnnual=null;debt();return}
+    var gross=P*r/100*d/365, s=stopaj(d), tax=gross*s, net=gross-tax, end=P+net;
+    var e=infl()/100, infP=Math.pow(1+e,d/365)-1, need=P*(1+infP), real=(end/need-1)*100;
+    $('o-taxl').textContent='Stopaj (%'+f1.format(s*100)+')';
+    tween($('o-gross'),gross,TL2); tween($('o-tax'),tax,TL2); tween($('o-net'),net,TL2); tween($('o-end'),end,TL2);
+    var mx=Math.max(end,need);
+    $('c1').style.width=(end/mx*100)+'%'; $('c2').style.width=(need/mx*100)+'%';
+    tween($('c1-v'),end,TL); tween($('c2-v'),need,TL);
+    var g=net/P; depNetAnnual=(Math.pow(1+g,365/d)-1)*100;
+    if(real>=0){v.className='verdict good';v.textContent='Bu varsayımla vade sonunda alım gücün yaklaşık '+pct(real,2)+' artar.'}
+    else{v.className='verdict bad';v.textContent='Bu varsayımla net faiz enflasyonun gerisinde kalır; alım gücün yaklaşık '+pct(Math.abs(real),2)+' azalır.'}
+    debt();
+  }
+  ['d-p','d-r','d-d'].forEach(function(id){$(id).addEventListener('input',function(){
+    if(id==='d-d'){syncChips()} deposit()})});
+  function syncChips(){
+    var d=Math.round(parse($('d-d').value));
+    document.querySelectorAll('[data-d]').forEach(function(b){b.setAttribute('aria-pressed',String(+b.dataset.d===d))});
+  }
+  document.querySelectorAll('[data-d]').forEach(function(b){b.addEventListener('click',function(){$('d-d').value=b.dataset.d;syncChips();deposit()})});
+
+  /* 3) Kredi kartı */
+  function debt(){
+    var P=parse($('k-p').value), m=parseFloat($('k-t').value)/100, v=$('k-verdict');
+    if(!isFinite(P)||P<=0){v.className='verdict';v.textContent='Geçerli bir borç tutarı yaz.';return}
+    var yr=(Math.pow(1+m,12)-1)*100, e=infl();
+    tween($('k-m'),P*m,TL2); tween($('k-y'),yr,function(x){return pct(x,1)});
+    var mx=Math.max(yr,POLICY,e,1);
+    $('b1').style.width=(yr/mx*100)+'%'; $('b2').style.width=(POLICY/mx*100)+'%'; $('b3').style.width=(e/mx*100)+'%';
+    $('b1-v').textContent=pct(yr,1); $('b2-v').textContent=pct(POLICY,0); $('b3-v').textContent=pct(e,2);
+    var txt='Bu oranla ödenmeyen '+TL(P)+' borç, bir yılda yaklaşık '+pct(yr,1)+' büyür (azami oran, bankan daha düşük uygulayabilir).';
+    if(depNetAnnual!=null){
+      txt+=' Yukarıda hesapladığın mevduatın net yıllık eşdeğer getirisi '+pct(depNetAnnual,1)+'; ';
+      txt+= yr>depNetAnnual ? 'borcun maliyeti bu getiriden yüksek.' : 'bu getiri borcun maliyetinden yüksek.';
+      v.className='verdict '+(yr>depNetAnnual?'bad':'good');
+    } else v.className='verdict';
+    v.textContent=txt;
+  }
+  $('k-p').addEventListener('input',debt); $('k-t').addEventListener('change',debt);
+
+  /* 4) Karşılaştırma kartları */
+  var ROWS=[
+    {n:'TL vadeli mevduat',tmsf:true,vol:false,den:'BDDK',
+     get:'Faiz oranı hesap açılırken bankayla belirlenir.',
+     vergi:'Stopaj: 6 aya kadar %'+trn(F.stopaj[0].rate)+'; 1 yıla kadar %'+trn(F.stopaj[1].rate)+'; 1 yıldan uzun %'+trn(F.stopaj[2].rate)+'.',
+     dikkat:'Anapara TL olarak korunur ama alım gücü enflasyona bağlıdır. Vadeden önce bozarsan bankanın koşulları geçerli olur.'},
+    {n:'Döviz hesabı',tmsf:true,vol:true,den:'BDDK',
+     get:'Kazanç ya da kayıp, kurun TL karşısındaki değişimine bağlıdır.',
+     vergi:'Ürüne göre değişir; güncel Resmî Gazete kararından teyit et.',
+     dikkat:'Sigorta kapsamında TL karşılığı, hesabın kapandığı tarihteki Merkez Bankası döviz alış kuruyla belirlenir.'},
+    {n:'Banka altın hesabı (kıymetli maden mevduatı)',tmsf:true,vol:true,den:'BDDK',
+     get:'Değer altın fiyatına bağlıdır, sabit getiri yoktur.',
+     vergi:'Ürüne göre değişir; bankadan ve resmi kaynaktan teyit et.',
+     dikkat:'Kıymetli maden cinsinden mevduat hesapları da sigorta kapsamındadır. Fiziki altın teslimi bankanın koşullarına bağlıdır.'},
+    {n:'Fiziki altın (kuyumcu, ziynet, külçe)',tmsf:false,vol:true,den:'-',
+     get:'Değer altın fiyatına bağlıdır, sabit getiri yoktur.',
+     vergi:'Ürüne göre değişir; mali müşavirden teyit et.',
+     dikkat:'Mevduat olmadığı için TMSF güvencesi yoktur. Kuyumcuda alış ve satış fiyatı arasında fark ve işçilik olabilir; saklama riski sende kalır.'},
+    {n:'Yatırım fonu',tmsf:false,vol:true,den:'SPK',
+     get:'Getiri fonun türüne ve yönetimine bağlıdır, garanti edilmez.',
+     vergi:'Fon türüne göre değişir; fonun izahnamesine ve güncel karara bak.',
+     dikkat:'Mevduat olmadığı için TMSF güvencesi yoktur. Geçmiş getiri, gelecek getirinin garantisi değildir.'},
+    {n:'Hisse senedi',tmsf:false,vol:true,den:'SPK',
+     get:'Fiyat her gün değişir; kazanç da zarar da olabilir.',
+     vergi:'Ürüne göre değişir; aracı kurumdan ve mali müşavirden teyit et.',
+     dikkat:'Mevduat olmadığı için TMSF güvencesi yoktur. İşlem yaptığın aracı kurumun yetkili olduğunu SPK\'dan doğrula.'}
+  ];
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function renderRows(filter){
+    var out='', n=0;
+    ROWS.forEach(function(r){
+      if(filter==='tmsf'&&!r.tmsf) return;
+      if(filter==='vol'&&!r.vol) return;
+      n++;
+      out+='<li><details><summary><strong>'+esc(r.n)+'</strong><span></span>'+
+        '<span class="tags"><span class="tag '+(r.tmsf?'yes':'no')+'">'+(r.tmsf?'TMSF güvencesi var':'TMSF güvencesi yok')+'</span>'+
+        '<span class="tag '+(r.vol?'no':'yes')+'">'+(r.vol?'Değeri dalgalanır':'Nominal anapara sabit')+'</span>'+
+        (r.den!=='-'?'<span class="tag">Denetleyen: '+r.den+'</span>':'')+'</span></summary>'+
+        '<dl><div><dt>Getiri nasıl oluşur?</dt><dd>'+esc(r.get)+'</dd></div>'+
+        '<div><dt>Vergi</dt><dd>'+esc(r.vergi)+'</dd></div>'+
+        '<div><dt>Dikkat</dt><dd>'+esc(r.dikkat)+'</dd></div></dl></details></li>';
+    });
+    $('inst').innerHTML=out;
+    $('inst-empty').style.display=n?'none':'block';
+  }
+  document.querySelectorAll('[data-f]').forEach(function(b){b.addEventListener('click',function(){
+    document.querySelectorAll('[data-f]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+    renderRows(b.dataset.f);
+  })});
+
+  /* 5) Kaynaklar */
+  var SRC=[
+    ['Yıllık enflasyon (TÜFE)','%'+trn(F.inflation.value),F.inflation.label+', TÜİK verisi','SBB','https://www.sbb.gov.tr/enflasyon/'],
+    ['TCMB politika faizi','%'+trn(F.policy.value),F.policy.label+' PPK kararı','TCMB','https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/PPK/PPK+Toplanti+Kararlari'],
+    ['TL mevduat stopajı',F.stopaj.map(function(t){return '%'+trn(t.rate)}).join(' / '),'Cumhurbaşkanı Kararı; geçerlilik '+F.stopaj_valid_until+' tarihine kadar','Resmî Gazete','https://www.resmigazete.gov.tr/eskiler/2026/06/20260620-4.pdf'],
+    ['Mevduat sigortası limiti',f0.format(F.tmsf_limit)+' TL','Her bankada, kişi başına','TMSF','https://www.tmsf.org.tr/tr/Tmsf/Finansman/mevduat.sss.guncel'],
+    ['Kredi kartı azami faiz (aylık)',F.credit_card.tiers.map(function(t){return '%'+trn(t.rate)}).join(' / '),F.credit_card.as_of+' tablosu; yapılandırmada referans oran %'+trn(F.credit_card.restructure),'TCMB','https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Istatistikler/Bankacilik+Verileri/Kredi_Karti_Islemlerinde_Uygulanacak_Azami_Faiz_Oranlari'],
+    ['Döviz ve kıymetli maden hesapları sigorta kapsamı','Kapsamda','TL karşılığı, hesabın kapandığı tarihteki kurla hesaplanır','Garanti BBVA (TMSF bilgilendirmesi)','https://www.garantibbva.com.tr/kurumsal-iletisim/tmsf-mevduat-sigortasi-bilgilendirmesi']
+  ];
+  $('src-body').innerHTML=SRC.map(function(s){
+    return '<tr><td>'+esc(s[0])+'</td><td><strong>'+esc(s[1])+'</strong></td><td>'+esc(s[2])+'</td><td><a href="'+s[4]+'" target="_blank" rel="noopener">'+esc(s[3])+'</a></td></tr>';
+  }).join('');
+
+  /* Başlat */
+  $('infl').value=trn(F.inflation.value);
+  $('f-infl-note').textContent='Son açıklanan gerçek değer '+trn(F.inflation.value)+' ('+F.inflation.label+').';
+  $('f-infl-label').textContent=F.inflation.label; $('f-cc-asof').textContent=CC_ASOF; $('f-tmsf').textContent=f0.format(F.tmsf_limit);
+  $('k-t').innerHTML=F.credit_card.tiers.map(function(t,i){return '<option value="'+t.rate+'"'+(i===1?' selected':'')+'>'+esc(t.label)+': %'+trn(t.rate)+'</option>'}).join('')+
+    '<option value="'+F.credit_card.restructure+'">Yapılandırma üst sınırı: %'+trn(F.credit_card.restructure)+'</option>';
+  var cd=F.checked.split('-'); $('f-checked').textContent=cd[2]+'.'+cd[1]+'.'+cd[0];
+  var age=Math.floor((Date.now()-new Date(F.checked+'T00:00:00').getTime())/86400000);
+  if(age>45) $('f-stale').textContent='Uyarı: bu rakamlar '+age+' gün önce kontrol edildi, güncel olmayabilir. Kaynak bağlantılarından teyit et.';
+  renderRows('all'); hero(); deposit(); debt();
+})();
+</script>
+</body>
+</html>

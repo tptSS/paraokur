@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% from "macros.html" import ad, affiliates with context %}
+{% block main %}
+<section class="hero hero-asset">
+  <div class="wrap">
+    <p class="crumbs"><a href="{{ u('/') }}">Ana sayfa</a> / {{ tool.name }}</p>
+    <h1>Altın Hesaplama</h1>
+    <p class="lede">Altınının güncel TL karşılığını hesapla ya da bütçenle ne kadar altın alabileceğini gör. Fiyatlar {{ updated_h }} itibarıyla günceldir.</p>
+  </div>
+</section>
+
+<section class="wrap block">
+  <div class="calc-grid">
+    <div class="calc" id="a1">
+      <h2>Altınım kaç TL?</h2>
+      <label for="a1-type">Altın türü</label>
+      <select id="a1-type">
+        {% for g in gold %}<option value="{{ g.price }}" data-qty="{{ g.qty }}">{{ g.name }} ({{ g.qty }})</option>{% endfor %}
+      </select>
+      <label for="a1-qty">Miktar</label>
+      <input id="a1-qty" inputmode="decimal" autocomplete="off" value="1">
+      <p class="result"><span id="a1-out">–</span> TL</p>
+    </div>
+    <div class="calc" id="a2">
+      <h2>Bütçemle ne kadar altın alırım?</h2>
+      <label for="a2-type">Altın türü</label>
+      <select id="a2-type">
+        {% for g in gold %}<option value="{{ g.price }}" data-qty="{{ g.qty }}">{{ g.name }} ({{ g.qty }})</option>{% endfor %}
+      </select>
+      <label for="a2-try">Bütçe (TL)</label>
+      <input id="a2-try" inputmode="decimal" autocomplete="off" value="10.000">
+      <p class="result"><span id="a2-out">–</span> <span id="a2-unit">gram</span></p>
+    </div>
+  </div>
+  <p class="fine">Hesaplama, has altın karşılığı üzerinden yapılır; kuyumcu işçiliği ve alış-satış farkı dahil değildir.</p>
+</section>
+
+<div class="wrap">{{ ad('middle') }}</div>
+
+<section class="wrap block prose">
+  <h2>Altın türleri arasındaki fark</h2>
+  <p>Gram altın 24 ayar has altını, çeyrek altın yaklaşık 1,75 gram ağırlığındaki 22 ayar ziynet altınını ifade eder. Yarım altın çeyreğin iki, tam altın dört katıdır. 14, 18 ve 22 ayar altınlar ise saflık oranına göre fiyatlanır: 14 ayar %58,5, 18 ayar %75, 22 ayar %91,6.</p>
+  <ul class="pills">
+    {% for g in gold %}<li><a href="{{ u('/' ~ g.slug ~ '/') }}">{{ g.name }} <b>{{ g.price|tr(2) }}</b></a></li>{% endfor %}
+  </ul>
+</section>
+{{ affiliates() }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
+  var T=window.TR;
+  function run1(){var p=+document.getElementById('a1-type').value,q=T.parse(document.getElementById('a1-qty').value);document.getElementById('a1-out').textContent=isFinite(q)?T.fmt(p*q,2):'–';}
+  function run2(){var s=document.getElementById('a2-type'),p=+s.value,b=T.parse(document.getElementById('a2-try').value);
+    document.getElementById('a2-out').textContent=isFinite(b)&&p>0?T.fmt(b/p,3):'–';
+    document.getElementById('a2-unit').textContent=s.options[s.selectedIndex].getAttribute('data-qty');}
+  ['a1-type','a1-qty'].forEach(function(i){document.getElementById(i).addEventListener('input',run1)});
+  ['a2-type','a2-try'].forEach(function(i){document.getElementById(i).addEventListener('input',run2)});
+  run1();run2();
+})();
+</script>
+{% endblock %}
