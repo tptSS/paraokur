@@ -26,7 +26,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
 /* Hero */
 .hero{background:var(--board);color:#e9efe9;padding:28px 0 34px}
 .hero h1{margin:0 0 6px;font-size:clamp(1.7rem,4.6vw,2.6rem);line-height:1.15;letter-spacing:-.4px}
-.lede{margin:6px 0 0;color:#b7c6bc;font-size:.98rem}
+.lede{margin:6px 0 0;color:#b7c6bc;font-size:.98rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--up-d);flex:none;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(98,214,156,.45)}50%{opacity:.5;box-shadow:0 0 0 5px rgba(98,214,156,0)}}
 .crumbs{margin:0 0 10px;font-size:.88rem;color:#93a89b}
 .crumbs a{color:#b7c6bc}
 .big-price{margin:8px 0 6px;font-size:clamp(2.6rem,9vw,4.6rem);font-weight:800;line-height:1;color:var(--amber);letter-spacing:-1px}
@@ -47,6 +49,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
 .b-price{font-size:1.2rem;font-weight:700;color:var(--amber);white-space:nowrap}
 .b-price small{font-size:.7rem;color:var(--amber-dim);font-weight:600}
 .board .chg.up{color:var(--up-d)} .board .chg.down{color:var(--down-d)} .board .chg.flat{color:#93a89b}
+.board>*{animation:riseIn .35s ease both}
+.board>*:nth-child(2){animation-delay:30ms} .board>*:nth-child(3){animation-delay:60ms}
+.board>*:nth-child(4){animation-delay:90ms} .board>*:nth-child(5){animation-delay:120ms}
+.board>*:nth-child(6){animation-delay:150ms} .board>*:nth-child(7){animation-delay:180ms}
+.board>*:nth-child(8){animation-delay:210ms} .board>*:nth-child(n+9){animation-delay:240ms}
+@keyframes riseIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Güven şeridi */
+.trust{list-style:none;display:flex;flex-wrap:wrap;gap:10px 24px;margin:16px 0 0;padding:0;font-size:.87rem;color:var(--mute)}
+.trust li{display:flex;align-items:center;gap:7px}
+.trust svg{width:17px;height:17px;flex:none;color:var(--up)}
 
 .chg{font-weight:600;white-space:nowrap}
 .chg.up{color:var(--up)} .chg.down{color:var(--down)} .chg.flat{color:var(--mute)}
@@ -136,7 +149,26 @@ details[open] summary{border-bottom:1px solid var(--line);margin-bottom:10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
-.feature{display:block;background:var(--board);color:#e9efe9;border-radius:10px;padding:20px 22px;text-decoration:none;border-left:6px solid var(--amber)}
-.feature strong{display:block;color:var(--amber);font-size:1.2rem;line-height:1.3;margin-bottom:4px}
-.feature span{color:#b7c6bc}
-.feature:hover{background:var(--board-2)}
+.feature{position:relative;display:block;overflow:hidden;background:linear-gradient(160deg,var(--board) 0%,var(--board-2) 100%);color:#e9efe9;border-radius:14px;padding:26px 24px;text-decoration:none;border:1px solid #24413a}
+.feature::before{content:"";position:absolute;inset:0;background:radial-gradient(560px 220px at 88% -12%,rgba(242,193,78,.16),transparent 60%);pointer-events:none}
+.feature-tag{position:relative;display:inline-block;background:var(--amber);color:#2a1f00;font-weight:800;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+.feature strong{position:relative;display:block;color:#fff;font-size:1.3rem;line-height:1.32;margin-bottom:6px;letter-spacing:-.2px;max-width:32ch}
+.feature-desc{position:relative;display:block;color:#b7c6bc;max-width:56ch}
+.feature-stats{position:relative;display:flex;flex-wrap:wrap;gap:12px 30px;margin:20px 0 0}
+.fstat{display:flex;flex-direction:column}
+.fstat b{color:var(--amber);font-size:1.5rem;font-weight:800;line-height:1.15}
+.fstat i{font-style:normal;color:#93a89b;font-size:.78rem;margin-top:2px}
+.feature-cta{position:relative;display:inline-flex;align-items:center;margin-top:20px;color:var(--amber);font-weight:700;font-size:.95rem;transition:letter-spacing .2s ease}
+.feature:hover{border-color:var(--amber-dim)}
+.feature:hover .feature-cta{letter-spacing:.03em}
+
+/* Kaydırınca beliren bölümler (JS varsa) */
+html.js .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+html.js .reveal.in{opacity:1;transform:none}
+
+@media (max-width:640px){
+  .feature{padding:22px 18px}
+  .feature-stats{gap:10px 22px}
+  .fstat b{font-size:1.3rem}
+  .trust{gap:9px 16px;font-size:.83rem}
+}
