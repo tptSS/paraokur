@@ -4,6 +4,7 @@
 Kullanım:
     python generator/build.py            # gerçek veriyle üret (dist/ klasörüne)
     python generator/build.py --demo     # internetsiz, sahte veriyle önizleme
+    python generator/build.py --demo --site-url http://localhost:8000   # yerel önizleme, config.json'a dokunmadan
 """
 from __future__ import annotations
 
@@ -458,9 +459,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--demo", action="store_true", help="sahte veriyle üret, geçmişi kaydetme")
     ap.add_argument("--out", default=str(ROOT / "dist"))
+    ap.add_argument("--site-url", help="config.json'daki site_url'i geçici olarak ez (örn. yerel önizleme için http://localhost:8000)")
     args = ap.parse_args()
 
     cfg = json.loads((ROOT / "config.json").read_text("utf-8"))
+    if args.site_url:
+        cfg["site_url"] = args.site_url
     now = datetime.now(TZ)
     hist = {"daily": {}, "updated": ""} if args.demo else load_history()
 

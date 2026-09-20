@@ -38,10 +38,10 @@ Sayfalar: ana pano, 12 ürün sayfası (gram/çeyrek/yarım/tam/14-18-22 ayar al
 
 ```bash
 pip install -r requirements.txt
-python generator/build.py --demo      # sahte veriyle önizleme, dist/ içine
+python generator/build.py --demo --site-url http://localhost:8000   # sahte veriyle önizleme, dist/ içine
 python -m http.server -d dist 8000
 ```
-(`--demo` gerçek geçmişi etkilemez. Yerel önizlemede `site_url` yolu yüzünden linkler bozuksa `site_url`'yi geçici olarak `http://localhost:8000` yap.)
+(`--demo` gerçek geçmişi etkilemez. `--site-url` sadece bu çalıştırma için `config.json`'daki `site_url`'yi ezer; dosyaya dokunmaz, yerel önizlemede linklerin ve canonical adreslerin `http://localhost:8000`'i göstermesini sağlar.)
 
 ## Bakım
 
