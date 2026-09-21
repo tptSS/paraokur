@@ -1,0 +1,73 @@
+/* ParaOkur hareket sistemi: tüm süre, eğri ve animasyonlar yalnızca burada.
+   İlkeler (emil-design-eng): sık yapılan eylemde animasyon yok, hareket anlam taşır (geri bildirim, konum, durum),
+   300 ms altı, ease-in yok, transform + opacity, girişte yavaş çıkışta hızlı. Gerekçe tablosu: DESIGN.md "Hareket". */
+
+:root{
+  --ease-out:cubic-bezier(.23,1,.32,1);        /* giriş ve tepki: hızlı başlar, yumuşak durur */
+  --ease-in-out:cubic-bezier(.77,0,.175,1);    /* ekranda yer değiştirme */
+  --ease-sheet:cubic-bezier(.32,.72,0,1);      /* alt çekmece */
+  --dur-press:120ms;                            /* basma geri bildirimi */
+  --dur-fast:160ms;                             /* hover, ok dönüşü, küçük açılır */
+  --dur-base:220ms;                             /* açılır menü, popover, giriş */
+  --dur-sheet:260ms;                            /* çekmece */
+  --dur-fill:280ms;                             /* çubuk dolması (üst sınır) */
+  --stagger:50ms;
+}
+
+/* Basma: dokunulabilir her şey duyduğunu hissettirir */
+.btn,.chip,.icon-btn,.tab{transition:transform var(--dur-press) var(--ease-out),background-color var(--dur-fast) ease,border-color var(--dur-fast) ease,color var(--dur-fast) ease}
+.btn:active,.chip:active,.icon-btn:active,.tab:active{transform:scale(.97)}
+.term:active{opacity:.7}
+
+/* Hover yalnızca fare/dokunmatik ayrımında: dokunmatik cihazda takılı kalan hover olmaz */
+@media (hover:hover) and (pointer:fine){
+  .btn--primary:hover{background:color-mix(in srgb,var(--brand) 86%,var(--ink))}
+  .btn--secondary:hover,.btn:not([class*="btn--"]):hover{background:var(--tint)}
+  .btn--ghost:hover{background:var(--tint)}
+  .chip:hover{border-color:var(--line-strong)}
+  .tab:hover{color:var(--ink)}
+  .term:hover{text-decoration-color:var(--ink)}
+}
+
+/* Açık menü (Araçlar): oku döner, panel aşağı doğru belirir */
+.menu>summary svg{transition:transform var(--dur-fast) var(--ease-out)}
+.menu[open]>summary svg{transform:rotate(180deg)}
+.menu[open] .menu-panel{animation:pop-down var(--dur-base) var(--ease-out)}
+@keyframes pop-down{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.menu-panel{transform-origin:top left}
+
+/* Açılır bilgi: ok dönüşü (içerik anında açılır, tekrar tekrar kullanılır) */
+.disclosure>summary::after{transition:transform var(--dur-fast) var(--ease-out)}
+
+/* Mobil çekmece ve sözlük kartı: alttan yükselir, çıkış anında */
+.drawer[open]{animation:sheet-up var(--dur-sheet) var(--ease-sheet)}
+.drawer[open]::backdrop{animation:fade-in var(--dur-base) ease-out}
+.term-pop:popover-open{animation:sheet-up var(--dur-sheet) var(--ease-sheet)}
+.term-pop:popover-open::backdrop{animation:fade-in var(--dur-base) ease-out}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@media (min-width:720px){
+  /* Geniş ekranda sözlük kartı tetikleyiciden büyür (modal değil, konuma bağlı) */
+  .term-pop:popover-open{transform-origin:var(--ox,0) var(--oy,0);animation:pop-in var(--dur-fast) var(--ease-out)}
+}
+@keyframes pop-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+/* Çubuk dolması (Para Rehberi): kısa ve anlam taşır; sürgü ile sık değişen değerde bekletmez */
+.bar-fill,.crow .fill{transition:transform var(--dur-fill) var(--ease-out)}
+
+/* İsteğe bağlı giriş: en fazla 3-4 öğe, sayfa başına tek an. --i ile sıralanır */
+.rise{animation:rise var(--dur-base) var(--ease-out) both;animation-delay:calc(var(--i,0)*var(--stagger))}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Azaltılmış hareket: konum ve ölçek hareketi kalkar, opaklık geçişi (anlamı koruyan) kalır */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .btn,.chip,.icon-btn,.tab{transition:background-color var(--dur-fast) ease,border-color var(--dur-fast) ease,color var(--dur-fast) ease}
+  .btn:active,.chip:active,.icon-btn:active,.tab:active{transform:none}
+  .menu>summary svg,.disclosure>summary::after{transition:none}
+  .menu[open] .menu-panel,.drawer[open],.rise{animation:fade-in var(--dur-fast) linear both;animation-delay:0s}
+  .term-pop:popover-open{animation:fade-in var(--dur-fast) linear both}
+  .drawer[open]::backdrop{animation:none}
+  .term-pop:popover-open::backdrop{animation:none}
+  .bar-fill,.crow .fill{transition:none!important}
+}

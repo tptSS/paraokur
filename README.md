@@ -45,7 +45,7 @@ python -m http.server -d dist 8000
 
 ## Tasarım sistemi ve marka
 
-Renk, tipografi, grid ve bileşen kararları `DESIGN.md` içinde. Ortak stiller `static/base.css` (tokenlar, header, footer), sayfaya özel stiller `static/style.css`. Logo ve ikonlar `static/brand/`, yazı tipi (Bricolage Grotesque, SIL OFL) `static/fonts/` altındadır ve kendi sunucumuzdan yüklenir. Bunları yeniden üretmek için `generator/brand_assets.py` (isteğe bağlı geliştirici aracı, `pip install fonttools brotli` gerekir).
+Renk, tipografi, grid ve bileşen kararları `DESIGN.md` içinde. Ortak stiller `static/base.css` (tokenlar, header, footer), `components.css` (bileşenler), `motion.css` (hareket), sayfaya özel stiller `static/style.css`; yayında ilk üçü `core.css` olarak birleştirilir. Bileşen kitaplığı: `python generator/build.py --demo --styleguide` → `/bilesenler/`. Logo ve ikonlar `static/brand/`, yazı tipi (Literata, SIL OFL) `static/fonts/` altındadır ve kendi sunucumuzdan yüklenir. Bunları yeniden üretmek için `generator/brand_assets.py` (Literata TTF gerekir) (isteğe bağlı geliştirici aracı, `pip install fonttools brotli` gerekir).
 
 ## Bakım
 

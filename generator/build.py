@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""AltınPano: altın / gümüş / döviz fiyat sitesini statik olarak üretir.
+"""ParaOkur: altın / gümüş / döviz fiyatları ve para okuryazarlığı araçları sitesini statik olarak üretir.
 
 Kullanım:
     python generator/build.py            # gerçek veriyle üret (dist/ klasörüne)
     python generator/build.py --demo     # internetsiz, sahte veriyle önizleme
     python generator/build.py --demo --site-url http://localhost:8000   # yerel önizleme, config.json'a dokunmadan
+    python generator/build.py --demo --styleguide                       # + /bilesenler/ bileşen kitaplığı
 """
 from __future__ import annotations
 
 import argparse
 import json
 import random
+import re
 import shutil
 import sys
 import time
@@ -26,7 +28,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 ROOT = Path(__file__).resolve().parent.parent
 TZ = ZoneInfo("Europe/Istanbul")
 OUNCE_GRAMS = 31.1034768
-UA = "Mozilla/5.0 (compatible; AltinPanoBot/1.0)"
+UA = "Mozilla/5.0 (compatible; ParaOkurBot/1.0)"
 HISTORY_FILE = ROOT / "data" / "history.json"
 
 # --------------------------------------------------------------------------
@@ -295,9 +297,25 @@ def demo(now: datetime, hist: dict) -> dict:
 
 
 # --------------------------------------------------------------------------
+# CSS: kaynak dosyalar ayrı kalır (base, components, motion); yayında tek dosya + küçültülmüş
+# --------------------------------------------------------------------------
+def minify_css(css: str) -> str:
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    css = re.sub(r"\s+", " ", css)
+    return re.sub(r"\s*([{};,>])\s*", r"\1", css).replace(";}", "}").strip()
+
+
+def bundle_css(assets: Path) -> None:
+    core = "\n".join((assets / f).read_text("utf-8") for f in ("base.css", "components.css", "motion.css"))
+    (assets / "core.css").write_text(minify_css(core), "utf-8")
+    style = assets / "style.css"
+    style.write_text(minify_css(style.read_text("utf-8")), "utf-8")
+
+
+# --------------------------------------------------------------------------
 # Site üretimi
 # --------------------------------------------------------------------------
-def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) -> None:
+def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path, styleguide: bool = False) -> None:
     site = cfg["site_url"].rstrip("/")
     base = urlparse(site).path.rstrip("/")
     today = now.date()
@@ -308,6 +326,7 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
         shutil.rmtree(out)
     out.mkdir(parents=True)
     shutil.copytree(ROOT / "static", out / "assets")
+    bundle_css(out / "assets")
     (out / ".nojekyll").write_text("")
     if cfg.get("domain"):
         (out / "CNAME").write_text(cfg["domain"].strip() + "\n")
@@ -317,6 +336,8 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
     env.filters["tr"] = tr
     env.filters["pct"] = pct_s
     env.filters["date_tr"] = date_tr
+    glossary = json.loads((ROOT / "data" / "glossary.json").read_text("utf-8"))
+    env.globals["glossary"] = glossary
 
     items = {}
     for a in ASSETS:
@@ -424,7 +445,8 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
     def partial(name: str) -> str:
         return env.get_template(f"partials/{name}.html").render(**g, path="/para-rehberi/")
     guide = (guide.replace("__HEAD_COMMON__", partial("head")).replace("__HEADER__", partial("header"))
-             .replace("__FOOTER__", partial("footer")).replace("__SCRIPTS__", f'<script src="{base}/assets/site.js?v={g["build_id"]}"></script>')
+             .replace("__FOOTER__", partial("footer")).replace("__SCRIPTS__", f'<script src="{base}/assets/site.js?v={g["build_id"]}"></script>'
+                                                  f'<script src="{base}/assets/ui.js?v={g["build_id"]}"></script>')
              .replace("__SITE_NAME__", cfg["site_name"]).replace("__BASE__", base)
              .replace("__CANONICAL__", site + "/para-rehberi/").replace("__HEAD_EXTRA__", head_extra)
              .replace("__FACTS__", json.dumps(facts, ensure_ascii=False).replace("</", "<\\/")))
@@ -441,6 +463,14 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
         page(f"/{slug}/", f"pages/{slug}.html", title=f"{ttl} | {cfg['site_name']}", description=dsc,
              jsonld=ld_graph(f"/{slug}/", ttl, dsc, [("Ana sayfa", "/"), (ttl, f"/{slug}/")]))
 
+    # Bileşen kitaplığı: yalnızca --styleguide ile, sitemap'e girmez, arama motoruna kapalı
+    if styleguide:
+        sg = out / "bilesenler"
+        sg.mkdir(parents=True, exist_ok=True)
+        (sg / "index.html").write_text(env.get_template("styleguide.html").render(
+            **g, path="/bilesenler/", title=f"Bileşenler | {cfg['site_name']}", description="Tasarım sistemi bileşenleri.",
+            jsonld=None, robots="noindex,nofollow"), "utf-8")
+
     # 404 (sitemap'e girmez)
     (out / "404.html").write_text(env.get_template("404.html").render(
         **g, path="/404.html", title=f"Sayfa bulunamadı | {cfg['site_name']}",
@@ -454,7 +484,7 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
         name=cfg["site_name"], short_name=cfg["site_name"], lang="tr", dir="ltr",
         description="Paranın dilini sade öğren: resmi kaynaklı rakamlarla basit hesaplar ve karşılaştırmalar.",
         start_url=f"{base}/", scope=f"{base}/", display="standalone",
-        background_color="#f2f6f5", theme_color="#0c2b33", icons=icons), ensure_ascii=False, indent=2), "utf-8")
+        background_color="#f7f3ec", theme_color="#2a1230", icons=icons), ensure_ascii=False, indent=2), "utf-8")
 
     # robots, sitemap, ads.txt
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {site}/sitemap.xml\n")
@@ -473,6 +503,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--demo", action="store_true", help="sahte veriyle üret, geçmişi kaydetme")
     ap.add_argument("--out", default=str(ROOT / "dist"))
+    ap.add_argument("--styleguide", action="store_true", help="/bilesenler/ bileşen kitaplığı sayfasını da üret (sitemap'e girmez)")
     ap.add_argument("--site-url", help="config.json'daki site_url'i geçici olarak ez (örn. yerel önizleme için http://localhost:8000)")
     args = ap.parse_args()
 
@@ -500,7 +531,7 @@ def main() -> None:
     if not args.demo:
         save_history(hist)
 
-    build_site(cfg, hist, prices, now, Path(args.out))
+    build_site(cfg, hist, prices, now, Path(args.out), styleguide=args.styleguide)
 
 
 if __name__ == "__main__":
