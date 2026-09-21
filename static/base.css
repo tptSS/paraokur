@@ -17,7 +17,7 @@
   --ink:#211a26; --mute:#5f5666;
   /* Marka: dut (eylem, bağlantı) ve işaretleyici (vurgulanan rakam) */
   --brand:#5e2154; --on-brand:#fff; --link:#5e2154;
-  --hl:#ffc9a6; --on-hl:#211a26;
+  --hl:#ffc9a6; --on-hl:#211a26; --hl-bar:var(--hl);
   --focus:#1b5fd1;
   /* Anlam renkleri: tek başına kullanılmaz, işaret ve ok da yazılır */
   --gain:#0b6b43; --loss:#b42318; --gain-bg:#dff1e6; --loss-bg:#fbe3df;
@@ -27,7 +27,7 @@
   --on-band:#f7eef3; --on-band-mute:#cdb8cb; --band-hl:#ffc9a6; --band-focus:#ffc9a6;
   --gain-d:#7fe0b0; --loss-d:#ff9e93;
   --logo:var(--brand);
-  --shadow:0 1px 2px rgba(33,26,38,.08),0 12px 32px rgba(33,26,38,.14);
+  --shadow:0 1px 2px rgba(33,26,38,.1),0 4px 12px rgba(33,26,38,.16);
 
   /* Yazı tipleri: okurken serif (Literata), yaparken sistem sans */
   --font-read:"Literata","Iowan Old Style",Georgia,"Times New Roman",serif;
@@ -60,11 +60,11 @@
     --bg:#161018; --surface:#211826; --tint:#2b2031; --line:#3c2e43; --line-strong:#8e7d93;
     --ink:#f4edf1; --mute:#bdaec0;
     --brand:#f0b8e3; --on-brand:#2a0f26; --link:#f0b8e3;
-    --on-hl:#241520; --focus:#8db8ff;
+    --on-hl:#241520; --focus:#8db8ff; --hl-bar:color-mix(in srgb,var(--hl) 40%,transparent);
     --gain:#7fe0b0; --loss:#ff9e93; --gain-bg:#123526; --loss-bg:#40201d;
     --warn-bg:#3a2b0e; --warn:#f3cd85;
     --band:#2a1230; --logo:var(--hl);
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.5);
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.55);
   }
 }
 :root[data-theme="dark"]{
@@ -72,11 +72,11 @@
   --bg:#161018; --surface:#211826; --tint:#2b2031; --line:#3c2e43; --line-strong:#8e7d93;
   --ink:#f4edf1; --mute:#bdaec0;
   --brand:#f0b8e3; --on-brand:#2a0f26; --link:#f0b8e3;
-  --on-hl:#241520; --focus:#8db8ff;
+  --on-hl:#241520; --focus:#8db8ff; --hl-bar:color-mix(in srgb,var(--hl) 40%,transparent);
   --gain:#7fe0b0; --loss:#ff9e93; --gain-bg:#123526; --loss-bg:#40201d;
   --warn-bg:#3a2b0e; --warn:#f3cd85;
   --band:#2a1230; --logo:var(--hl);
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.5);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.55);
 }
 
 /* ---------- Temel ---------- */
@@ -116,9 +116,9 @@ input,select,button,textarea{font:inherit;color:inherit}
 main :is(p,td,li,dd,.fine,.note,.sub,.lede) a:not(.btn):not(.chip):not(.src-tag):not(.tool):not(.board-row):not(.src){position:relative}
 main :is(p,td,li,dd,.fine,.note,.sub,.lede) a:not(.btn):not(.chip):not(.src-tag):not(.tool):not(.board-row):not(.src)::after{content:"";position:absolute;inset:-13px -10px}
 /* İşaretleyici: en önemli rakam ya da ifade (arka plan, metin rengi değişmez) */
-.hl{background:linear-gradient(transparent 58%,var(--hl) 58% 94%,transparent 94%);padding-inline:.08em;
+.hl{background:linear-gradient(transparent 58%,var(--hl-bar) 58% 94%,transparent 94%);padding-inline:.08em;
   -webkit-box-decoration-break:clone;box-decoration-break:clone;color:inherit}
-.band--ink .hl,.hero .hl,.result--ink .hl{background:linear-gradient(transparent 58%,color-mix(in srgb,var(--band-hl) 38%,transparent) 58% 94%,transparent 94%)}
+.band--ink,.hero,.result--ink{--hl-bar:color-mix(in srgb,var(--band-hl) 38%,transparent)}
 
 /* ---------- Düzen ---------- */
 .shell{width:100%;max-width:calc(1200px + 2*var(--gutter));margin-inline:auto;padding-inline:var(--gutter)}

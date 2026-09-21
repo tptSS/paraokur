@@ -21,7 +21,7 @@ h3{font-size:var(--t-h3)}
 .crumbs{margin-bottom:var(--sp-2);font-size:var(--t-label);color:var(--on-band-mute)}
 .crumbs a{color:var(--on-band);display:inline-flex;align-items:center;min-height:var(--tap);min-width:var(--tap)}
 .big-price{margin:var(--sp-2) 0;font-size:var(--t-num);font-weight:800;line-height:1;letter-spacing:-.035em;color:var(--on-band)}
-.big-price small{font-size:.32em;font-weight:600;color:var(--on-band-mute);letter-spacing:0;margin-left:6px}
+.big-price small{font-size:max(1rem,.32em);font-weight:600;color:var(--on-band-mute);letter-spacing:0;margin-left:6px}
 .chips{display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-6);margin-top:var(--sp-4);color:var(--on-band)}
 
 /* Fiyat panosu */
