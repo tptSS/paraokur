@@ -39,8 +39,7 @@ label{display:block;font-size:.86rem;color:var(--mute);margin:0 0 5px}
 input[type=range]{padding:0;height:44px;accent-color:var(--amber);background:transparent;border:0}
 .bar{position:relative;height:64px;border-radius:10px;overflow:hidden;margin-top:14px;
   background:var(--band);border:1px solid var(--band-line)}
-.bar-fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--amber);
-  border-radius:0 10px 10px 0;}
+.bar-fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--amber);transform-origin:left}
 .bar.quick .bar-fill{transition-duration:0s}
 .bar-tag{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:#2a1230;font-size:1.15rem;z-index:1}
 .melt-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
@@ -68,7 +67,7 @@ section.blk>.wrap>p.sub{color:var(--mute);margin:8px 0 0;max-width:60ch}
 .compare{margin-top:18px;display:grid;gap:10px}
 .crow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;font-size:.92rem}
 .crow .track{grid-column:1 / -1;height:16px;border-radius:8px;background:var(--chip);overflow:hidden}
-.crow .fill{height:100%;width:0;border-radius:8px;background:var(--deep);}
+.crow .fill{height:100%;width:100%;transform:scaleX(0);transform-origin:left;background:var(--deep)}
 .crow .fill.amber{background:var(--amber)} .crow .fill.red{background:var(--bad)} .crow .fill.green{background:var(--good)}
 .crow b{font-variant-numeric:tabular-nums}
 .verdict{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-weight:600}
@@ -295,11 +294,11 @@ __SCRIPTS__
     var k=Math.pow(1+e,m/12), pp=A/k, need=A*k, share=100/k;
     var bar=$('bar');
     if(first){
-      $('fill').style.width='100%';
-      requestAnimationFrame(function(){requestAnimationFrame(function(){$('fill').style.width=share+'%'})});
+      $('fill').style.transform='scaleX(1)';
+      requestAnimationFrame(function(){requestAnimationFrame(function(){$('fill').style.transform='scaleX('+share/100+')'})});
       first=false; setTimeout(function(){bar.classList.add('quick')},1700);
     } else {
-      $('fill').style.width=share+'%';
+      $('fill').style.transform='scaleX('+share/100+')';
     }
     tween($('bar-tag'),share,function(v){return pct(v,0)});
     tween($('pp'),pp,TL); tween($('need'),need,TL); tween($('loss'),A-pp,function(v){return '-'+TL(v)});
@@ -325,7 +324,7 @@ __SCRIPTS__
     $('o-taxl').textContent='Stopaj (%'+f1.format(s*100)+')';
     tween($('o-gross'),gross,TL2); tween($('o-tax'),tax,TL2); tween($('o-net'),net,TL2); tween($('o-end'),end,TL2);
     var mx=Math.max(end,need);
-    $('c1').style.width=(end/mx*100)+'%'; $('c2').style.width=(need/mx*100)+'%';
+    $('c1').style.transform='scaleX('+end/mx+')'; $('c2').style.transform='scaleX('+need/mx+')';
     tween($('c1-v'),end,TL); tween($('c2-v'),need,TL);
     var g=net/P; depNetAnnual=(Math.pow(1+g,365/d)-1)*100;
     if(real>=0){v.className='verdict good';v.textContent='Bu varsayımla vade sonunda alım gücün yaklaşık '+pct(real,2)+' artar.'}
@@ -347,7 +346,7 @@ __SCRIPTS__
     var yr=(Math.pow(1+m,12)-1)*100, e=infl();
     tween($('k-m'),P*m,TL2); tween($('k-y'),yr,function(x){return pct(x,1)});
     var mx=Math.max(yr,POLICY,e,1);
-    $('b1').style.width=(yr/mx*100)+'%'; $('b2').style.width=(POLICY/mx*100)+'%'; $('b3').style.width=(e/mx*100)+'%';
+    $('b1').style.transform='scaleX('+yr/mx+')'; $('b2').style.transform='scaleX('+POLICY/mx+')'; $('b3').style.transform='scaleX('+e/mx+')';
     $('b1-v').textContent=pct(yr,1); $('b2-v').textContent=pct(POLICY,0); $('b3-v').textContent=pct(e,2);
     var txt='Bu oranla ödenmeyen '+TL(P)+' borç, bir yılda yaklaşık '+pct(yr,1)+' büyür (azami oran, bankan daha düşük uygulayabilir).';
     if(depNetAnnual!=null){

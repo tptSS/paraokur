@@ -86,8 +86,8 @@ a.src-tag:hover{text-decoration:underline}
 .disclosure>summary{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);min-height:52px;padding:var(--sp-2) var(--sp-4);
   cursor:pointer;list-style:none;font:700 var(--t-ui)/1.35 var(--font-ui)}
 .disclosure>summary::-webkit-details-marker{display:none}
-.disclosure>summary::after{content:"";flex:none;width:9px;height:9px;margin-top:-4px;border:solid var(--mute);border-width:0 2px 2px 0;transform:rotate(45deg)}
-.disclosure[open]>summary::after{transform:rotate(-135deg);margin-top:4px}
+.disclosure>summary::after{content:"";flex:none;width:9px;height:9px;border:solid var(--mute);border-width:0 2px 2px 0;transform:translateY(-3px) rotate(45deg)}
+.disclosure[open]>summary::after{transform:translateY(3px) rotate(-135deg)}
 .disclosure>:not(summary){padding:0 var(--sp-4) var(--sp-4);max-width:var(--measure)}
 .disclosure .formula{display:block;padding:var(--sp-3) var(--sp-4);margin:0 0 var(--sp-3);border-radius:var(--r-sm);background:var(--tint);font-family:var(--font-ui);font-size:var(--t-label);overflow-x:auto}
 .disclosure--plain{background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0}
