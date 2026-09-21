@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% from "macros.html" import icon, term, src_tag, chg with context %}
+{% block main %}
+<section class="hero">
+  <div class="shell">
+    <h1>Bileşenler</h1>
+    <p class="lede">ParaOkur tasarım sisteminin canlı dokümanı. Yalnızca <code>build.py --styleguide</code> ile üretilir, sitemap'e girmez. Kararların gerekçesi DESIGN.md'de.</p>
+  </div>
+</section>
+
+<div class="band"><div class="shell stack">
+
+<section aria-labelledby="sg-renk">
+  <h2 id="sg-renk">Renk</h2>
+  <p class="mute" style="margin-bottom:var(--sp-4)">Sıcak kâğıt zemin, mürekkep metin, dut rengi eylem, tek vurgu olarak işaretleyici (kayısı). Artış ve azalış rengi tek başına anlam taşımaz.</p>
+  <div class="grid" style="--min:150px">
+    {% for n, v in [("bg","--bg"),("surface","--surface"),("tint","--tint"),("ink","--ink"),("mute","--mute"),("brand","--brand"),("hl","--hl"),("gain","--gain"),("loss","--loss"),("band","--band")] %}
+    <div class="card" style="padding:var(--sp-3);display:grid;gap:var(--sp-2)"><span style="height:56px;border-radius:var(--r-sm);background:var({{ v }});border:1px solid var(--line)"></span><b>{{ n }}</b><small class="mute">{{ v }}</small></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section aria-labelledby="sg-tip">
+  <h2 id="sg-tip">Tipografi</h2>
+  <div class="card flow">
+    <p style="font:800 var(--t-display)/1.05 var(--font-read);letter-spacing:-.02em">Paranın dilini sade öğren</p>
+    <h1>Başlık 1: iki satıra kadar</h1>
+    <h2>Başlık 2: bölüm başlığı</h2>
+    <h3>Başlık 3: kart başlığı</h3>
+    <p class="lead">Giriş cümlesi: sayfanın ne yaptığını tek soluk okunur biçimde söyler.</p>
+    <p class="read">Okuma metni Literata ile 17 piksel, satır aralığı 1,68 ve en çok 68 karakter genişliktedir. Uzun paragraflar serif ile, işlem yapılan arayüz (düğme, etiket, tablo) sistem sans ile yazılır: okurken serif, yaparken sans.</p>
+    <p style="font-size:var(--t-label)">Etiket ve tablo metni: 15 piksel, sistem sans.</p>
+    <p style="font-size:var(--t-meta);color:var(--mute)">Meta: 13 piksel, yalnızca yasal metin ve rozet.</p>
+    <p style="font:800 var(--t-num)/1.05 var(--font-read)"><span class="hl">₺1.234.567</span></p>
+  </div>
+</section>
+
+<section aria-labelledby="sg-btn">
+  <h2 id="sg-btn">Düğme</h2>
+  <div class="cluster">
+    <button class="btn btn--primary" type="button">Hesapla</button>
+    <button class="btn btn--secondary" type="button">Sıfırla</button>
+    <button class="btn" type="button">Varsayılan</button>
+    <button class="btn btn--ghost" type="button">Metin düğmesi {{ icon('arrow-right') }}</button>
+    <button class="btn btn--primary" type="button" disabled>Devre dışı</button>
+    <button class="btn btn--secondary btn--sm" type="button">{{ icon('copy') }}Sonucu kopyala</button>
+  </div>
+</section>
+
+<section aria-labelledby="sg-girdi">
+  <h2 id="sg-girdi">Girdi</h2>
+  <div class="field-row" style="max-width:820px">
+    <div class="field"><label for="sg-tutar">Tutar</label>
+      <div class="input-wrap"><input class="input" id="sg-tutar" inputmode="decimal" autocomplete="off" data-money data-decimals="2" value="100.000"><span class="unit">₺</span></div>
+      <span class="hint">Yazarken binlik ayracı otomatik gelir. Ondalık için virgül kullan.</span></div>
+    <div class="field"><label for="sg-vade">Vade</label>
+      <div class="input-wrap"><input class="input" id="sg-vade" inputmode="numeric" autocomplete="off" data-money value="32"><span class="unit">gün</span></div></div>
+    <div class="field"><label for="sg-hata">Hatalı örnek</label>
+      <input class="input" id="sg-hata" aria-invalid="true" aria-describedby="sg-hata-e" value="abc">
+      <span class="err" id="sg-hata-e">{{ icon('alert') }}Sayı yaz, örneğin 25.000</span></div>
+    <div class="field"><label for="sg-sec">Seçim</label>
+      <div class="select-wrap"><select class="select" id="sg-sec"><option>Gram altın</option><option>Çeyrek altın</option></select></div></div>
+  </div>
+</section>
+
+<section aria-labelledby="sg-cip">
+  <h2 id="sg-cip">Çip</h2>
+  <div class="chips" role="group" aria-label="Örnek seçenekler">
+    <button class="chip" type="button" aria-pressed="true">10.000 ₺</button>
+    <button class="chip" type="button" aria-pressed="false">50.000 ₺</button>
+    <button class="chip" type="button" aria-pressed="false">100.000 ₺</button>
+    <a class="chip" href="#sg-cip">Bağlantı çipi {{ icon('arrow-right') }}</a>
+  </div>
+</section>
+
+<section aria-labelledby="sg-sonuc">
+  <h2 id="sg-sonuc">Sonuç kartı</h2>
+  <div class="grid" style="--min:340px">
+    <article class="result" aria-labelledby="sg-r1">
+      <p class="result-label" id="sg-r1">Örnek: bir yıl sonra paranın alım gücü</p>
+      <p class="result-num" aria-live="polite"><span class="hl">76.000</span><small>₺</small></p>
+      <p class="result-say"><strong>Bu ne demek?</strong>Örnek metin: bugün bu parayla alabildiğin şeyi, bir yıl sonra almak zorlaşır. Rakamlar örnektir.</p>
+      <div class="result-foot">
+        {{ src_tag("TÜİK", facts.checked, "https://data.tuik.gov.tr/") }}
+        <details class="disclosure"><summary>Nasıl hesapladık?</summary><div><code class="formula">alım gücü = tutar ÷ (1 + enflasyon)</code><p>Kaynak ve kontrol tarihi yukarıda. Hesap tarayıcında yapılır, hiçbir şey gönderilmez.</p></div></details>
+      </div>
+    </article>
+    <article class="result result--ink" aria-labelledby="sg-r2">
+      <p class="result-label" id="sg-r2">Koyu varyant</p>
+      <p class="result-num"><span class="hl">1.875</span><small>₺</small></p>
+      <p class="result-say"><strong>Bu ne demek?</strong>Koyu bant üstünde kullanılır: aynı yapı, aynı okunabilirlik.</p>
+      <div class="result-foot">{{ src_tag("TCMB", facts.checked) }}<button class="btn btn--primary btn--sm" type="button">{{ icon('share') }}Paylaş</button></div>
+    </article>
+  </div>
+</section>
+
+<section aria-labelledby="sg-acil">
+  <h2 id="sg-acil">Açılır bilgi ve sözlük terimi</h2>
+  <div class="prose" style="margin-bottom:var(--sp-4)"><p>Bazı kelimeler dokununca açılır: {{ term('enflasyon') }}, {{ term('stopaj') }} ve {{ term('makas') }} gibi. Kartın dışına dokunarak ya da Esc ile kapanır.</p></div>
+  <details class="disclosure"><summary>Fiyatlar nereden geliyor?</summary><p>Dolar, euro ve sterlin için TCMB döviz satış kuru; altın ve gümüş için uluslararası piyasa verisi kullanılır.</p></details>
+  <details class="disclosure"><summary>Kuyumcu fiyatıyla aynı mı?</summary><p>Hayır. Kuyumcu işçilik ve makas ekler.</p></details>
+</section>
+
+<section aria-labelledby="sg-sekme">
+  <h2 id="sg-sekme">Sekme</h2>
+  <div class="tabs" data-tabs>
+    <div class="tablist" role="tablist" aria-label="Piyasa">
+      <button class="tab" role="tab" id="sg-t1" aria-controls="sg-p1" aria-selected="true">Altın</button>
+      <button class="tab" role="tab" id="sg-t2" aria-controls="sg-p2" aria-selected="false" tabindex="-1">Döviz</button>
+      <button class="tab" role="tab" id="sg-t3" aria-controls="sg-p3" aria-selected="false" tabindex="-1">Gümüş</button>
+    </div>
+    <div class="tabpanel" role="tabpanel" id="sg-p1" aria-labelledby="sg-t1" tabindex="0"><p>Altın paneli. Ok tuşlarıyla sekmeler arasında gez.</p></div>
+    <div class="tabpanel" role="tabpanel" id="sg-p2" aria-labelledby="sg-t2" tabindex="0" hidden><p>Döviz paneli.</p></div>
+    <div class="tabpanel" role="tabpanel" id="sg-p3" aria-labelledby="sg-t3" tabindex="0" hidden><p>Gümüş paneli.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="sg-tablo">
+  <h2 id="sg-tablo">Tablo</h2>
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Örnek fiyat tablosu">
+    <table class="table table--min">
+      <thead><tr><th scope="col">Ürün</th><th scope="col" class="num">Fiyat</th><th scope="col" class="num">Günlük</th></tr></thead>
+      <tbody>
+      {% for a in groups[0]['items'][:3] %}<tr><th scope="row">{{ a.name }}</th><td class="num">{{ a.price|tr(a.dec) }} {{ a.unit }}</td><td class="num">{{ chg(a.st.d1) }}</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="sg-bos">
+  <h2 id="sg-bos">Boş durum ve uyarı</h2>
+  <div class="grid" style="--min:320px">
+    <div class="empty-state">
+      <svg class="illo" viewBox="0 0 96 64" fill="none" aria-hidden="true"><path d="M6 58h84" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 6"/><rect x="14" y="40" width="14" height="18" rx="3" fill="currentColor" opacity=".35"/><rect x="41" y="28" width="14" height="30" rx="3" fill="currentColor" opacity=".6"/><rect x="68" y="12" width="14" height="46" rx="3" fill="currentColor"/><circle cx="75" cy="6" r="4" fill="var(--hl)"/></svg>
+      <h3>Toplanıyor</h3>
+      <p>Grafik için en az iki günlük kayıt gerekiyor. Site her saat veri topladığı için yarın görünmeye başlar.</p>
+    </div>
+    <div class="flow">
+      <div class="callout">{{ icon('info') }}<div><strong>Bilgi</strong><p>Bu hesap yargılamaz, yalnızca rakamı gösterir.</p></div></div>
+      <div class="callout callout--warn">{{ icon('alert') }}<div><strong>Dikkat</strong><p>Bu rakam örnek varsayıma dayanır; kendi teklifini yaz.</p></div></div>
+      <div class="callout callout--legal">{{ icon('shield-check') }}<p>Genel bilgidir, yatırım tavsiyesi değildir.</p></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="sg-ikon">
+  <h2 id="sg-ikon">İkon seti</h2>
+  <p class="mute" style="margin-bottom:var(--sp-4)">24 piksel ızgara, 1,75 çizgi, yuvarlak uç. Her yerde aynı stil.</p>
+  <div class="grid" style="--min:96px">
+    {% for n in ['check','x','menu','chevron-down','chevron-right','arrow-right','arrow-up-right','info','alert','question','shield-check','clock','calendar','copy','share','download','image','link','search','sun','moon','calculator','ingot','globe','sprout','card','wallet','trend-down','trend-up','chart','percent','target','book','scale','umbrella','bulb','list'] %}
+    <div class="card" style="padding:var(--sp-3);display:grid;justify-items:center;gap:6px"><svg class="i" style="width:28px;height:28px" aria-hidden="true"><use href="#i-{{ n }}"/></svg><small class="mute">{{ n }}</small></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section aria-labelledby="sg-hareket">
+  <h2 id="sg-hareket">Hareket</h2>
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Hareket tokenları"><table class="table table--min"><thead><tr><th scope="col">Token</th><th scope="col">Değer</th><th scope="col">Nerede</th></tr></thead><tbody>
+    <tr><th scope="row">--dur-press</th><td>120 ms</td><td>Basınca küçülme (0,97)</td></tr>
+    <tr><th scope="row">--dur-fast</th><td>160 ms</td><td>Hover, ok dönüşü, popover</td></tr>
+    <tr><th scope="row">--dur-base</th><td>220 ms</td><td>Açılır menü, giriş</td></tr>
+    <tr><th scope="row">--dur-sheet</th><td>260 ms</td><td>Alt çekmece ve sözlük kartı</td></tr>
+    <tr><th scope="row">--dur-fill</th><td>280 ms</td><td>Çubuk dolması (üst sınır)</td></tr>
+    <tr><th scope="row">--ease-out</th><td>cubic-bezier(.23,1,.32,1)</td><td>Giriş, tepki</td></tr>
+    <tr><th scope="row">--ease-sheet</th><td>cubic-bezier(.32,.72,0,1)</td><td>Çekmece</td></tr>
+  </tbody></table></div>
+</section>
+
+</div></div>
+{% endblock %}

@@ -25,3 +25,18 @@
 </section>
 {%- endif -%}
 {%- endmacro %}
+
+{% macro icon(name, cls="") -%}
+<svg class="i {{ cls }}" aria-hidden="true" focusable="false"><use href="#i-{{ name }}"/></svg>
+{%- endmacro %}
+
+{# Sözlük terimi: sözlük tanımı data/glossary.json'da, kart footer'daki tek popover'da açılır #}
+{% macro term(key, text=None) -%}
+<button type="button" class="term" data-term="{{ key }}" aria-haspopup="dialog" aria-expanded="false">{{ text or glossary[key].title|lower }}</button>
+{%- endmacro %}
+
+{# Kaynak etiketi: rakamın nereden geldiği ve ne zaman kontrol edildiği #}
+{% macro src_tag(label, checked, url=None) -%}
+{%- if url -%}<a class="src-tag" href="{{ url }}" target="_blank" rel="noopener">{{ icon('shield-check') }}<span>Kaynak: {{ label }}</span> <span aria-hidden="true">·</span> <span>kontrol <time datetime="{{ checked }}">{{ checked|date_tr }}</time></span></a>
+{%- else -%}<span class="src-tag">{{ icon('shield-check') }}<span>Kaynak: {{ label }}</span> <span aria-hidden="true">·</span> <span>kontrol <time datetime="{{ checked }}">{{ checked|date_tr }}</time></span></span>{%- endif -%}
+{%- endmacro %}

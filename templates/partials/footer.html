@@ -35,3 +35,9 @@
     <p class="foot-copy">© {{ updated_iso[:4] }} {{ cfg.site_name }}</p>
   </div>
 </footer>
+<div id="term-pop" class="term-pop" popover role="dialog" aria-modal="false" aria-labelledby="term-title" tabindex="-1">
+  <strong class="term-title" id="term-title"></strong>
+  <p class="term-text"></p>
+  <button type="button" class="btn btn--secondary btn--sm term-close">Anladım</button>
+</div>
+<script type="application/json" id="glossary-data">{{ glossary|tojson }}</script>

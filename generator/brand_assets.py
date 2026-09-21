@@ -4,13 +4,14 @@
 Gereksinim (yalnızca bu betik için):  pip install fonttools brotli
 Chrome/Edge (PNG için) yolu CHROME ortam değişkeniyle verilebilir.
 
-    python generator/brand_assets.py font  <BricolageGrotesque[opsz,wdth,wght].ttf>
-    python generator/brand_assets.py brand <BricolageGrotesque[opsz,wdth,wght].ttf>
+    python generator/brand_assets.py font  <Literata[opsz,wght].ttf>
+    python generator/brand_assets.py brand <Literata[opsz,wght].ttf>
 
-Yazı tipi: Bricolage Grotesque (SIL OFL 1.1), https://github.com/ateliertriay/bricolage
+Yazı tipi: Literata (SIL OFL 1.1), https://github.com/googlefonts/literata
 """
 from __future__ import annotations
 
+import io
 import os
 import subprocess
 import sys
@@ -19,10 +20,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BRAND = ROOT / "static" / "brand"
-FONT_OUT = ROOT / "static" / "fonts" / "bricolage-grotesque-tr.woff2"
+FONT_OUT = ROOT / "static" / "fonts" / "literata-tr.woff2"
 
-INK = "#0c2b33"    # mürekkep (petrol)
-COIN = "#ffb81c"   # sikke
+INK = "#2a1230"    # patlıcan (koyu bant)
+COIN = "#ffc9a6"   # işaretleyici (kayısı)
 MARK_PATH = ("M32 4a28 28 0 1 0 0 56 28 28 0 0 0 0-56ZM13 29c6-2 12-1 16 2v14c-4-3-10-4-16-2V29Z"
              "m21 8h5v9h-5v-9Zm7-7h5v16h-5V30Zm7-8h5v24h-5V22Z")
 
@@ -40,10 +41,14 @@ def make_font(src: str) -> None:
     from fontTools.ttLib import TTFont
     from fontTools.varLib import instancer
 
-    f = instancer.instantiateVariableFont(TTFont(src), {"wdth": 100, "wght": (400, 800), "opsz": (14, 48)})
+    f = instancer.instantiateVariableFont(TTFont(src), {"wght": (400, 800), "opsz": (12, 48)})
+    buf = io.BytesIO()          # örneklenen fontu kaydedip yeniden yükle: alt küme işlemi bu sayede sorunsuz çalışır
+    f.save(buf)
+    buf.seek(0)
+    f = TTFont(buf)
     unis = (list(range(0x20, 0x7F)) + list(range(0xA0, 0x100)) + [0x11E, 0x11F, 0x130, 0x131, 0x15E, 0x15F]
             + [0x2013, 0x2014, 0x2018, 0x2019, 0x201A, 0x201C, 0x201D, 0x2022, 0x2026, 0x2032, 0x2033, 0x20AC,
-               0x20BA, 0x2190, 0x2191, 0x2192, 0x2193, 0x2212, 0x2248, 0x2264, 0x2265])
+               0x20BA, 0x2190, 0x2191, 0x2192, 0x2193, 0x2212, 0x2248, 0x2264, 0x2265, 0x25B2, 0x25BC])
     o = subset.Options()
     o.flavor = "woff2"
     o.layout_features = ["kern", "liga", "tnum", "lnum", "pnum", "case", "ccmp", "locl", "mark", "mkmk", "calt", "zero"]
@@ -69,7 +74,7 @@ def outlines(src: str, text: str, wght: int, size: float, x0: float) -> tuple[st
     from fontTools.ttLib import TTFont
     from fontTools.varLib import instancer
 
-    f = instancer.instantiateVariableFont(TTFont(src), {"wdth": 100, "wght": wght, "opsz": 40})
+    f = instancer.instantiateVariableFont(TTFont(src), {"wght": wght, "opsz": 40})
     gs, cmap, upm = f.getGlyphSet(), f.getBestCmap(), f["head"].unitsPerEm
     k, x, d = size / upm, x0, []
     for ch in text:
@@ -129,13 +134,13 @@ def make_brand(src: str) -> None:
     shot(icon_html(192, 0.84, 42), BRAND / "icon-192.png", 192, 192)
     shot(icon_html(512, 0.84, 112), BRAND / "icon-512.png", 512, 512)
     shot(icon_html(512, 0.56, 0), BRAND / "icon-maskable-512.png", 512, 512)  # güvenli bölge: merkez %80
-    font = (ROOT / "static" / "fonts" / "bricolage-grotesque-tr.woff2").as_uri()
+    font = (ROOT / "static" / "fonts" / "literata-tr.woff2").as_uri()
     og = (f'<style>@font-face{{font-family:B;src:url({font});font-weight:400 800}}'
           f'body{{margin:0;width:1200px;height:630px;background:{INK};color:#fff;font-family:B;position:relative;overflow:hidden}}'
           f'.m{{position:absolute;left:80px;top:70px;width:96px;height:96px;color:{COIN}}}'
           f'.n{{position:absolute;left:196px;top:84px;font-size:64px;font-weight:800;letter-spacing:-.02em}}.n b{{font-weight:500}}'
           f'h1{{position:absolute;left:80px;top:236px;margin:0;font-size:104px;line-height:1.04;letter-spacing:-.035em;font-weight:800;width:800px}}'
-          f'p{{position:absolute;left:80px;bottom:64px;margin:0;font-size:32px;line-height:1.35;color:#9fc3c2;width:640px}}'
+          f'p{{position:absolute;left:80px;bottom:64px;margin:0;font-size:32px;line-height:1.35;color:#cdb8cb;width:640px}}'
           f'.c{{position:absolute;right:-170px;bottom:-210px;width:560px;height:560px;border-radius:50%;background:{COIN}}}</style>'
           f'<div class=c></div><div class=m>{mark_svg().replace("<svg ", "<svg width=100% height=100% ")}</div>'
           f'<div class=n>Para<b>Okur</b></div><h1>Paranın dilini sade öğren.</h1>'
