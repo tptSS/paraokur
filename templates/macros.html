@@ -1,11 +1,15 @@
+{% macro mark(cls="mark") -%}
+<svg class="{{ cls }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M32 4a28 28 0 1 0 0 56 28 28 0 0 0 0-56ZM13 29c6-2 12-1 16 2v14c-4-3-10-4-16-2V29Zm21 8h5v9h-5v-9Zm7-7h5v16h-5V30Zm7-8h5v24h-5V22Z"/></svg>
+{%- endmacro %}
+
 {% macro ad(slot) -%}
 {%- if cfg.adsense_client and cfg.ad_slots.get(slot) -%}
-<div class="ad" aria-label="Reklam"><ins class="adsbygoogle" style="display:block" data-ad-client="{{ cfg.adsense_client }}" data-ad-slot="{{ cfg.ad_slots[slot] }}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
+<aside class="ad" aria-label="Reklam"><span class="ad-label">Reklam</span><ins class="adsbygoogle" style="display:block" data-ad-client="{{ cfg.adsense_client }}" data-ad-slot="{{ cfg.ad_slots[slot] }}" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></aside>
 {%- endif -%}
 {%- endmacro %}
 
 {% macro chg(v) -%}
-{%- if v is none -%}<span class="chg flat">–</span>{%- else -%}<span class="chg {{ 'up' if v > 0.005 else ('down' if v < -0.005 else 'flat') }}">{{ v|pct }}</span>{%- endif -%}
+{%- if v is none -%}<span class="chg is-pending" title="Değişimi hesaplamak için kayıt biriktiriliyor">Toplanıyor</span>{%- else -%}<span class="chg {{ 'up' if v > 0.005 else ('down' if v < -0.005 else 'flat') }}">{{ v|pct }}</span>{%- endif -%}
 {%- endmacro %}
 
 {% macro affiliates() -%}

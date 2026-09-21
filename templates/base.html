@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ title }}</title>
 <meta name="description" content="{{ description }}">
 <link rel="canonical" href="{{ site }}{{ path }}">
@@ -13,8 +13,7 @@
 <meta property="og:url" content="{{ site }}{{ path }}">
 <meta property="og:site_name" content="{{ cfg.site_name }}">
 <meta property="og:locale" content="tr_TR">
-<meta name="theme-color" content="#0f1f1a">
-<link rel="icon" href="{{ u('/assets/favicon.svg') }}" type="image/svg+xml">
+{% include "partials/head.html" %}
 <link rel="stylesheet" href="{{ u('/assets/style.css') }}?v={{ build_id }}">
 {% if cfg.adsense_client %}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ cfg.adsense_client }}" crossorigin="anonymous"></script>
@@ -28,31 +27,12 @@
 {% endif %}
 </head>
 <body>
-<a class="skip" href="#icerik">İçeriğe geç</a>
-<header class="top">
-  <div class="wrap top-in">
-    <a class="brand" href="{{ u('/') }}">{{ cfg.site_name }}</a>
-    <nav aria-label="Ana menü">
-      {% for n in nav %}<a href="{{ u('/' ~ n.slug ~ '/') }}"{% if path == '/' ~ n.slug ~ '/' %} aria-current="page"{% endif %}>{{ n.name.split(' (')[0] }}</a>{% endfor %}
-      <a href="{{ u('/para-rehberi/') }}">Para Rehberi</a>
-      <a href="{{ u('/altin-hesaplama/') }}"{% if path.startswith('/altin-h') or path.startswith('/doviz-c') or path.startswith('/altin-g') %} aria-current="page"{% endif %}>Araçlar</a>
-    </nav>
-  </div>
-</header>
+{% include "partials/header.html" %}
 <main id="icerik">
 {% block main %}{% endblock %}
 </main>
-<footer class="foot">
-  <div class="wrap">
-    <p><strong>Yasal uyarı:</strong> Bu sitedeki fiyatlar uluslararası piyasa verilerinden hesaplanan göstergedir; kuyumcu, banka veya döviz bürosu fiyatlarından farklı olabilir. İçerik yatırım tavsiyesi değildir.</p>
-    <p class="foot-links">
-      <a href="{{ u('/hakkinda/') }}">Hakkında</a>
-      <a href="{{ u('/gizlilik/') }}">Gizlilik</a>
-      <a href="{{ u('/iletisim/') }}">İletişim</a>
-      <span>© {{ updated_iso[:4] }} {{ cfg.site_name }}</span>
-    </p>
-  </div>
-</footer>
+{% include "partials/footer.html" %}
+<script src="{{ u('/assets/site.js') }}?v={{ build_id }}"></script>
 <script src="{{ u('/assets/app.js') }}?v={{ build_id }}"></script>
 {% block scripts %}{% endblock %}
 </body>

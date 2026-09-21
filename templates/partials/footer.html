@@ -1,0 +1,37 @@
+{% from "macros.html" import mark %}
+<footer class="site-foot">
+  <div class="shell">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="{{ u('/') }}" aria-label="{{ cfg.site_name }} ana sayfa">{{ mark() }}<span class="brand-name">Para<b>Okur</b></span></a>
+        <p>Paranın dilini sade öğren. Resmi kaynaklı rakamlarla basit hesaplar ve karşılaştırmalar.</p>
+      </div>
+      <nav aria-label="Sayfalar">
+        <h2>Keşfet</h2>
+        <ul>
+          <li><a href="{{ u('/') }}">Güncel fiyatlar</a></li>
+          <li><a href="{{ u('/para-rehberi/') }}">Para Rehberi</a></li>
+          <li><a href="{{ u('/gram-altin/') }}">Gram altın</a></li>
+          <li><a href="{{ u('/dolar/') }}">Dolar</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Araçlar">
+        <h2>Araçlar</h2>
+        <ul>{% for t in tools %}<li><a href="{{ u('/' ~ t.slug ~ '/') }}">{{ t.name }}</a></li>{% endfor %}</ul>
+      </nav>
+      <nav aria-label="Kurumsal">
+        <h2>Kurumsal</h2>
+        <ul>
+          <li><a href="{{ u('/hakkinda/') }}">Hakkında</a></li>
+          <li><a href="{{ u('/gizlilik/') }}">Gizlilik</a></li>
+          <li><a href="{{ u('/iletisim/') }}">İletişim</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-sources">
+      <p><strong>Kaynaklar:</strong> Piyasa verisi TCMB ve uluslararası piyasa verileridir. Para Rehberi rakamları TÜİK, TCMB, TMSF ve Resmî Gazete gibi resmi kaynaklardan alınır. Resmi rakamların son kontrol tarihi: <time datetime="{{ facts.checked }}">{{ facts.checked|date_tr }}</time>.</p>
+      <p><strong>Yasal uyarı:</strong> Bu sitedeki fiyatlar uluslararası piyasa verilerinden hesaplanan göstergedir; kuyumcu, banka veya döviz bürosu fiyatlarından farklı olabilir. İçerik genel bilgidir, yatırım tavsiyesi değildir.</p>
+    </div>
+    <p class="foot-copy">© {{ updated_iso[:4] }} {{ cfg.site_name }}</p>
+  </div>
+</footer>

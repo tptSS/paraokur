@@ -2,67 +2,73 @@
 {% from "macros.html" import ad, chg, affiliates with context %}
 {% block main %}
 <section class="hero">
-  <div class="wrap">
+  <div class="shell">
     <h1>Altın, gümüş ve döviz fiyatları</h1>
-    <p class="lede"><span class="live-dot" aria-hidden="true"></span>Fiyatlar her saat başı otomatik güncellenir. Son güncelleme: <time datetime="{{ updated_iso }}">{{ updated_h }}</time> (Türkiye saati)</p>
+    <p class="lede"><span class="live-dot" aria-hidden="true"></span>Her saat başı güncellenir. Son güncelleme: <time datetime="{{ updated_iso }}">{{ updated_h }}</time> (Türkiye saati)</p>
   </div>
 </section>
 
-<section class="wrap">
-  <div class="board" role="table" aria-label="Güncel fiyatlar">
-    <div class="board-head" role="row">
-      <span role="columnheader">Ürün</span><span role="columnheader">Fiyat</span><span role="columnheader">Günlük</span><span role="columnheader" class="b-7d">Haftalık</span>
+<section class="band">
+  <div class="shell layout layout--side">
+    <div>
+      <div class="board">
+        <div class="board-head" aria-hidden="true">
+          <span>Ürün</span><span>Fiyat</span><span>Günlük</span><span class="b-7d">Haftalık</span>
+        </div>
+        {% for grp in groups %}
+        <p class="board-group" aria-hidden="true">{{ grp.name }}</p>
+        <ul class="board-list" aria-label="{{ grp.name }} fiyatları">
+          {% for a in grp['items'] %}
+          <li><a class="board-row" href="{{ u('/' ~ a.slug ~ '/') }}">
+            <span class="b-name">{{ a.name }}</span>
+            <span class="b-price"><span class="sr-only">Fiyat: </span>{{ a.price|tr(a.dec) }} <small>{{ a.unit }}</small></span>
+            <span class="b-1d"><span class="sr-only">Günlük: </span>{{ chg(a.st.d1) }}</span>
+            <span class="b-7d"><span class="sr-only">Haftalık: </span>{{ chg(a.st.d7) }}</span>
+          </a></li>
+          {% endfor %}
+        </ul>
+        {% endfor %}
+      </div>
+      <p class="fine">Günlük ve haftalık değişimler sitenin kendi kayıtlarından hesaplanır; yeni bir üründe kayıt biriktikçe görünür. Fiyatlar gösterge niteliğindedir, alım satım öncesi kurumdan teyit edin.</p>
+      {{ ad('top') }}
     </div>
-    {% for grp in groups %}
-    <div class="board-group" role="rowgroup">{{ grp.name }}</div>
-    {% for a in grp['items'] %}
-    <a class="board-row" role="row" href="{{ u('/' ~ a.slug ~ '/') }}">
-      <span class="b-name" role="cell">{{ a.name }}</span>
-      <span class="b-price" role="cell">{{ a.price|tr(a.dec) }} <small>{{ a.unit }}</small></span>
-      <span class="b-1d" role="cell">{{ chg(a.st.d1) }}</span>
-      <span class="b-7d" role="cell">{{ chg(a.st.d7) }}</span>
-    </a>
-    {% endfor %}
-    {% endfor %}
-  </div>
-  <p class="fine">Günlük ve haftalık değişimler, sitenin kendi kayıtlarına göre hesaplanır. Yeni kurulan sitede kayıt biriktikçe görünür.</p>
-  <ul class="trust" aria-label="Güvenilirlik bilgisi">
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2" stroke-linecap="round" stroke-linejoin="round"/></svg>Saatlik otomatik güncelleme</li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 4.5-3.2 7.7-8 9-4.8-1.3-8-4.5-8-9V7l8-4z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>TCMB ve uluslararası piyasa verisi</li>
-    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 16.5h.01" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/></svg>Yatırım tavsiyesi değil, sadece hesaplama</li>
-  </ul>
-</section>
 
-<div class="wrap">{{ ad('top') }}</div>
-
-<section class="wrap block reveal">
-  <a class="feature" href="{{ u('/para-rehberi/') }}">
-    <span class="feature-tag">Öne çıkan</span>
-    <strong>Para Rehberi: paran bir yılda ne kadar değer kaybeder?</strong>
-    <span class="feature-desc">Enflasyon, mevduat faizi ve kredi kartı borcunu resmi kaynaklı rakamlarla kendin hesapla.</span>
-    <span class="feature-stats">
-      <span class="fstat"><b>%{{ facts.inflation.value|tr(2) }}</b>Yıllık enflasyon <i>TÜİK, {{ facts.inflation.label }}</i></span>
-      <span class="fstat"><b>%{{ facts.policy.value|tr(0) }}</b>Politika faizi <i>TCMB, {{ facts.policy.label }}</i></span>
-    </span>
-    <span class="feature-cta">Hesaplamaya başla →</span>
-  </a>
-</section>
-
-<section class="wrap block reveal" aria-labelledby="araclar-h">
-  <h2 id="araclar-h">Hesaplama araçları</h2>
-  <div class="tools">
-    {% for t in tools %}
-    <a class="tool" href="{{ u('/' ~ t.slug ~ '/') }}"><strong>{{ t.name }}</strong><span>{{ t.short }}</span></a>
-    {% endfor %}
+    <aside class="side side--sticky" aria-label="Para Rehberi ve araçlar">
+      <a class="feature" href="{{ u('/para-rehberi/') }}">
+        <span class="feature-tag">Para Rehberi</span>
+        <strong>Paran bir yılda ne kadar değer kaybeder?</strong>
+        <span class="feature-desc">Enflasyon, mevduat faizi ve kredi kartı borcunu resmi kaynaklı rakamlarla kendin hesapla.</span>
+        <span class="feature-stats">
+          <span class="fstat"><b>%{{ facts.inflation.value|tr(2) }}</b>Yıllık enflasyon <i>TÜİK, {{ facts.inflation.label }}</i></span>
+          <span class="fstat"><b>%{{ facts.policy.value|tr(0) }}</b>Politika faizi <i>TCMB, {{ facts.policy.label }}</i></span>
+        </span>
+        <span class="feature-cta">Hesaplamaya başla</span>
+      </a>
+      <div class="card">
+        <h2>Hesaplama araçları</h2>
+        <div class="tools">
+          {% for t in tools %}
+          <a class="tool" href="{{ u('/' ~ t.slug ~ '/') }}"><strong>{{ t.name }}</strong><span>{{ t.short }}</span></a>
+          {% endfor %}
+        </div>
+      </div>
+      <ul class="trust card" aria-label="Güvenilirlik bilgisi">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2" stroke-linecap="round" stroke-linejoin="round"/></svg>Fiyatlar saatlik otomatik güncellenir</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l8 4v5c0 4.5-3.2 7.7-8 9-4.8-1.3-8-4.5-8-9V7l8-4z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>Kaynak: TCMB ve uluslararası piyasa verisi</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 9v4M12 16.5h.01" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/></svg>Yatırım tavsiyesi değil, sadece hesaplama</li>
+      </ul>
+    </aside>
   </div>
 </section>
 
-<section class="wrap block prose reveal" aria-labelledby="nasil-h">
-  <h2 id="nasil-h">Fiyatlar nasıl hesaplanıyor?</h2>
-  <p>Gram altın; uluslararası ons altın fiyatının gram ve Türk lirası karşılığından hesaplanır. Çeyrek, yarım ve tam altın ile 14, 18 ve 22 ayar altın fiyatları, has altın fiyatı üzerinden ağırlık ve saflık oranıyla türetilir. Dolar, euro ve sterlin için Türkiye Cumhuriyet Merkez Bankası kurları kullanılır.</p>
-  <p>Kuyumcularda ve bankalarda görülen satış fiyatları; alış-satış farkı ve işçilik nedeniyle burada gösterilen değerden yüksek olabilir. Alım satım öncesinde güncel fiyatı işlem yapacağınız kurumdan teyit etmenizi öneririz.</p>
+<section class="band band--tint" aria-labelledby="nasil-h">
+  <div class="shell prose">
+    <h2 id="nasil-h">Fiyatlar nasıl hesaplanıyor?</h2>
+    <p>Gram altın; uluslararası ons altın fiyatının gram ve Türk lirası karşılığından hesaplanır. Çeyrek, yarım ve tam altın ile 14, 18 ve 22 ayar altın fiyatları, has altın fiyatı üzerinden ağırlık ve saflık oranıyla türetilir. Dolar, euro ve sterlin için Türkiye Cumhuriyet Merkez Bankası kurları kullanılır.</p>
+    <p>Kuyumcularda ve bankalarda görülen satış fiyatları; alış-satış farkı ve işçilik nedeniyle burada gösterilen değerden yüksek olabilir. Alım satım öncesinde güncel fiyatı işlem yapacağınız kurumdan teyit etmenizi öneririz.</p>
+  </div>
 </section>
 
-<div class="wrap">{{ ad('bottom') }}</div>
+<div class="shell">{{ ad('bottom') }}</div>
 {{ affiliates() }}
 {% endblock %}

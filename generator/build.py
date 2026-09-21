@@ -338,9 +338,9 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
         dict(slug="altin-getiri-hesaplama", name="Kâr / Zarar Hesaplama", short="Alış fiyatını gir; güncel değeri, kâr veya zararı ve yüzde getiriyi gör."),
     ]
 
+    facts = json.loads((ROOT / "data" / "facts.json").read_text("utf-8"))
     g = dict(cfg=cfg, site=site, u=lambda p: base + p, build_id=now.strftime("%Y%m%d"),
-             updated_iso=updated_iso, updated_h=updated_h, groups=groups, tools=tools,
-             nav=[items["gram-altin"], items["ceyrek-altin"], items["gumus"], items["dolar"]])
+             updated_iso=updated_iso, updated_h=updated_h, groups=groups, tools=tools, facts=facts)
     sitemap: list[str] = []
 
     def page(path: str, template: str, **ctx) -> None:
@@ -364,12 +364,11 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
         return {"@context": "https://schema.org", "@graph": graph}
 
     # Ana sayfa
-    facts = json.loads((ROOT / "data" / "facts.json").read_text("utf-8"))
     gram = items["gram-altin"]
     title = f"Altın Fiyatları, Gram Altın, Çeyrek Altın, Dolar ve Euro | {cfg['site_name']}"
     desc = (f"Gram altın {tr(gram['price'])} TL. Çeyrek altın, gümüş, dolar ve euro fiyatları her saat otomatik güncellenir; "
             f"grafik, geçmiş fiyatlar ve hesaplama araçları.")
-    page("/", "index.html", title=title, description=desc, home=items, facts=facts,
+    page("/", "index.html", title=title, description=desc, home=items,
          jsonld=ld_graph("/", title, desc, [("Ana sayfa", "/")]))
 
     # Varlık sayfaları
@@ -422,7 +421,11 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
                        f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}'
                        f'gtag("js",new Date());gtag("config","{gid}");</script>')
     guide = (ROOT / "content" / "para-rehberi.html").read_text("utf-8")
-    guide = (guide.replace("__SITE_NAME__", cfg["site_name"]).replace("__BASE__", base)
+    def partial(name: str) -> str:
+        return env.get_template(f"partials/{name}.html").render(**g, path="/para-rehberi/")
+    guide = (guide.replace("__HEAD_COMMON__", partial("head")).replace("__HEADER__", partial("header"))
+             .replace("__FOOTER__", partial("footer")).replace("__SCRIPTS__", f'<script src="{base}/assets/site.js?v={g["build_id"]}"></script>')
+             .replace("__SITE_NAME__", cfg["site_name"]).replace("__BASE__", base)
              .replace("__CANONICAL__", site + "/para-rehberi/").replace("__HEAD_EXTRA__", head_extra)
              .replace("__FACTS__", json.dumps(facts, ensure_ascii=False).replace("</", "<\\/")))
     (out / "para-rehberi").mkdir(parents=True, exist_ok=True)
@@ -442,6 +445,16 @@ def build_site(cfg: dict, hist: dict, prices: dict, now: datetime, out: Path) ->
     (out / "404.html").write_text(env.get_template("404.html").render(
         **g, path="/404.html", title=f"Sayfa bulunamadı | {cfg['site_name']}",
         description="Aradığınız sayfa bulunamadı.", jsonld=None), "utf-8")
+
+    # Web app manifest (yol öneki site_url'den gelir, GitHub Pages proje sitelerinde de çalışır)
+    icons = [dict(src=f"{base}/assets/brand/icon-192.png", sizes="192x192", type="image/png", purpose="any"),
+             dict(src=f"{base}/assets/brand/icon-512.png", sizes="512x512", type="image/png", purpose="any"),
+             dict(src=f"{base}/assets/brand/icon-maskable-512.png", sizes="512x512", type="image/png", purpose="maskable")]
+    (out / "site.webmanifest").write_text(json.dumps(dict(
+        name=cfg["site_name"], short_name=cfg["site_name"], lang="tr", dir="ltr",
+        description="Paranın dilini sade öğren: resmi kaynaklı rakamlarla basit hesaplar ve karşılaştırmalar.",
+        start_url=f"{base}/", scope=f"{base}/", display="standalone",
+        background_color="#f2f6f5", theme_color="#0c2b33", icons=icons), ensure_ascii=False, indent=2), "utf-8")
 
     # robots, sitemap, ads.txt
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {site}/sitemap.xml\n")

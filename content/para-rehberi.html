@@ -8,47 +8,29 @@
 <meta property="og:title" content="Para Rehberi: Enflasyon, Faiz ve Borç">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="tr_TR">
-<link rel="icon" href="__BASE__/assets/favicon.svg" type="image/svg+xml">
+__HEAD_COMMON__
 __HEAD_EXTRA__
 <meta name="description" content="Paranın alım gücü bir yılda ne olur? Mevduat faizi enflasyonu yener mi? Kredi kartı borcu gerçekte ne kadar tutar? Resmi kaynaklı rakamlarla hesapla.">
 <style>
+/* Renk, tema ve tipografi ortak sistemden (base.css); burada yalnızca bu sayfanın eski adları eşlenir. */
 :root{
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-  --bg:#eef1ef; --card:#ffffff; --ink:#15211d; --mute:#57675f; --line:#d5ddd8;
-  --deep:#0f1f1a; --deep2:#16302a; --amber:#f2c14e; --amber-ink:#7a5a05;
-  --good:#17804f; --bad:#c23b32; --good-bg:#e3f4ea; --bad-bg:#fbe7e5; --chip:#e6ece8;
+  --card:var(--surface); --chip:var(--tint); --deep:var(--band); --deep2:var(--band-2); --amber:var(--coin);
+  --good:var(--gain); --bad:var(--loss); --good-bg:var(--gain-bg); --bad-bg:var(--loss-bg);
   --hatch:rgba(255,255,255,.09);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0b1310; --card:#12221c; --ink:#e8f0ea; --mute:#94a99e; --line:#24413a;
-    --amber-ink:#f2c14e; --good:#62d69c; --bad:#ff8f86; --good-bg:#12362a; --bad-bg:#3a1c1a; --chip:#1a3029;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0b1310; --card:#12221c; --ink:#e8f0ea; --mute:#94a99e; --line:#24413a;
-  --amber-ink:#f2c14e; --good:#62d69c; --bad:#ff8f86; --good-bg:#12362a; --bad-bg:#3a1c1a; --chip:#1a3029;
-}
-html{background:#0f1f1a;height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
-  font:400 17px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  font-variant-numeric:tabular-nums}
-.wrap{max-width:880px;margin:0 auto;padding:0 18px}
-a{color:inherit}
-:focus-visible{outline:3px solid #3b8cff;outline-offset:2px;border-radius:4px}
-h1,h2,h3{line-height:1.2;margin:0}
-input,select,button{font:inherit;color:inherit}
-input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);min-width:0}
+.wrap{max-width:calc(960px + 2*var(--gutter));margin:0 auto;padding:0 var(--gutter)}
+input,select{width:100%;min-height:48px;padding:11px 12px;border:1px solid var(--mute);border-radius:8px;background:var(--card);min-width:0}
 label{display:block;font-size:.86rem;color:var(--mute);margin:0 0 5px}
 
 /* HERO */
-.hero{background:var(--deep);color:#e9f0eb;padding:22px 0 30px}
-.hero .top{font-weight:800;color:var(--amber);font-size:1.05rem;margin:0 0 22px}
+.hero{background:var(--deep);color:var(--on-band);padding:32px 0 40px}
+@media (min-width:1024px){
+  .hero .wrap{max-width:calc(1200px + 2*var(--gutter));display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);column-gap:64px;align-items:start}
+  .hero h1,.hero .lede{grid-column:1}
+  .hero .melt{grid-column:2;grid-row:1 / span 3;margin-top:0}
+}
 .hero h1{font-size:clamp(1.65rem,5.4vw,2.6rem);letter-spacing:-.4px;max-width:20ch}
-.lede{color:#b9c9be;margin:12px 0 0;max-width:52ch;font-size:1rem}
+.lede{color:var(--on-band-mute);margin:12px 0 0;max-width:52ch;font-size:1rem}
 .melt{margin-top:26px;background:var(--deep2);border-radius:14px;padding:18px}
 .melt-top{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .melt label{color:#9fb4a7}
@@ -117,9 +99,6 @@ table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
 th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
 thead th{font-size:.8rem;color:var(--mute);font-weight:600}
 tbody tr:last-child td{border-bottom:0}
-footer{margin-top:44px;background:var(--deep);color:#b9c9be;padding:26px 0 30px;font-size:.9rem}
-footer p{margin:0 0 10px;max-width:70ch}
-footer strong{color:#fff}
 @media (max-width:520px){
   body{font-size:16px}
   .melt-top{grid-template-columns:1fr}
@@ -133,9 +112,11 @@ footer strong{color:#fff}
 </head>
 <body>
 
-<header class="hero">
+__HEADER__
+
+<main id="icerik">
+<section class="hero">
   <div class="wrap">
-    <p class="top"><a href="__BASE__/" style="text-decoration:none">__SITE_NAME__</a> Para Rehberi</p>
     <h1>Bankadaki paran bir yılda ne kadar değer kaybeder?</h1>
     <p class="lede">Rakamları biz uydurmuyoruz. Her rakam resmi bir kurumdan geliyor ve kaynağı yanında yazıyor.</p>
 
@@ -166,9 +147,8 @@ footer strong{color:#fff}
       </p>
     </div>
   </div>
-</header>
+</section>
 
-<main>
 
 <section class="blk" aria-labelledby="h-mevduat">
   <div class="wrap">
@@ -267,13 +247,8 @@ footer strong{color:#fff}
 
 </main>
 
-<footer>
-  <div class="wrap">
-    <p><strong>Yasal uyarı:</strong> Bu sayfa genel bilgilendirme ve eğitim amaçlıdır; yatırım danışmanlığı değildir ve kişiye özel tavsiye içermez. Hesaplayıcılar senin yazdığın rakamlar ve belirtilen varsayımlarla çalışır, geleceği tahmin etmez. Karar vermeden önce ilgili kurumdan güncel bilgiyi teyit et.</p>
-    <p><a href="__BASE__/">Fiyat panosu</a> &nbsp; <a href="__BASE__/hakkinda/">Hakkında</a> &nbsp; <a href="__BASE__/gizlilik/">Gizlilik</a> &nbsp; <a href="__BASE__/iletisim/">İletişim</a></p>
-    <p>Yetkili kurumları doğrulamak için: <a href="https://www.spk.gov.tr" target="_blank" rel="noopener">SPK</a>, <a href="https://www.bddk.org.tr" target="_blank" rel="noopener">BDDK</a>.</p>
-  </div>
-</footer>
+__FOOTER__
+__SCRIPTS__
 
 <script>window.FACTS=__FACTS__;</script>
 <script>
