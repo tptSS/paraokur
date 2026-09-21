@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% from "macros.html" import ad, chg, affiliates with context %}
 {% block main %}
-<section class="hero hero-asset">
-  <div class="wrap">
+<section class="hero">
+  <div class="shell">
     <p class="crumbs"><a href="{{ u('/') }}">Ana sayfa</a> / {{ a.name }}</p>
     <h1>{{ a.name }} Fiyatı</h1>
     <p class="big-price">{{ a.price|tr(a.dec) }} <small>{{ a.unit }}</small></p>
@@ -15,81 +15,86 @@
   </div>
 </section>
 
-<div class="wrap">{{ ad('top') }}</div>
+<div class="band">
+  <div class="shell layout layout--side">
+    <div class="stack">
+      {{ ad('top') }}
 
-<section class="wrap block">
-  <h2>{{ a.name }} grafiği</h2>
-  {% if spark %}
-  <figure class="spark {{ 'up' if spark.up else 'down' }}">
-    <svg viewBox="0 0 {{ spark.w }} {{ spark.h }}" role="img" aria-label="{{ a.name }} son {{ spark.n }} günlük fiyat grafiği" preserveAspectRatio="none">
-      <path class="area" d="{{ spark.area }}"/>
-      <path class="line" d="{{ spark.line }}" vector-effect="non-scaling-stroke"/>
-    </svg>
-    <figcaption>{{ spark.first[8:10] }}.{{ spark.first[5:7] }}.{{ spark.first[:4] }} – {{ spark.last[8:10] }}.{{ spark.last[5:7] }}.{{ spark.last[:4] }} arası günlük kapanış değerleri</figcaption>
-  </figure>
-  {% else %}
-  <p class="empty">Grafik için en az iki günlük kayıt gerekiyor. Site her saat veri topladığı için grafik yarın görünmeye başlayacak.</p>
-  {% endif %}
-</section>
+      <section>
+        <h2>{{ a.name }} grafiği</h2>
+        {% if spark %}
+        <figure class="spark {{ 'up' if spark.up else 'down' }}">
+          <svg viewBox="0 0 {{ spark.w }} {{ spark.h }}" role="img" aria-label="{{ a.name }} son {{ spark.n }} günlük fiyat grafiği" preserveAspectRatio="none">
+            <path class="area" d="{{ spark.area }}"/>
+            <path class="line" d="{{ spark.line }}" vector-effect="non-scaling-stroke"/>
+          </svg>
+          <figcaption>{{ spark.first[8:10] }}.{{ spark.first[5:7] }}.{{ spark.first[:4] }} – {{ spark.last[8:10] }}.{{ spark.last[5:7] }}.{{ spark.last[:4] }} arası günlük kapanış değerleri</figcaption>
+        </figure>
+        {% else %}
+        <p class="empty"><strong>Veri toplanıyor.</strong> Grafik için en az iki günlük kayıt gerekiyor. Site her saat veri topladığı için grafik yarın görünmeye başlayacak.</p>
+        {% endif %}
+      </section>
 
-<section class="wrap block prose">
-  <h2>{{ a.name }} bugün</h2>
-  <p>{{ text }}</p>
-  <p>{{ a.about }}</p>
-  {% if a.st.n30 >= 2 %}
-  <dl class="stats">
-    <div><dt>30 gün en düşük</dt><dd>{{ a.st.lo30|tr(a.dec) }} {{ a.unit }}</dd></div>
-    <div><dt>30 gün en yüksek</dt><dd>{{ a.st.hi30|tr(a.dec) }} {{ a.unit }}</dd></div>
-    <div><dt>30 gün ortalama</dt><dd>{{ a.st.avg30|tr(a.dec) }} {{ a.unit }}</dd></div>
-  </dl>
-  {% endif %}
-</section>
+      <section class="prose">
+        <h2>{{ a.name }} bugün</h2>
+        <p>{{ text }}</p>
+        <p>{{ a.about }}</p>
+        {% if a.st.n30 >= 2 %}
+        <dl class="stats">
+          <div><dt>30 gün en düşük</dt><dd>{{ a.st.lo30|tr(a.dec) }} {{ a.unit }}</dd></div>
+          <div><dt>30 gün en yüksek</dt><dd>{{ a.st.hi30|tr(a.dec) }} {{ a.unit }}</dd></div>
+          <div><dt>30 gün ortalama</dt><dd>{{ a.st.avg30|tr(a.dec) }} {{ a.unit }}</dd></div>
+        </dl>
+        {% endif %}
+      </section>
 
-<section class="wrap block">
-  <h2>Hızlı hesaplama</h2>
-  <div class="calc" data-calc data-price="{{ a.price }}">
-    <label for="qty">Miktar ({{ a.qty }})</label>
-    <input id="qty" inputmode="decimal" autocomplete="off" value="1" data-in>
-    <p class="result"><span data-out>{{ a.price|tr(a.dec) }}</span> {{ a.unit }}</p>
+      {{ ad('middle') }}
+
+      {% if rows %}
+      <section>
+        <h2>Geçmiş {{ a.name }} fiyatları</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">Tarih</th><th scope="col" class="num">Fiyat ({{ a.unit }})</th><th scope="col" class="num">Değişim</th></tr></thead>
+            <tbody>
+            {% for r in rows %}
+              <tr><th scope="row">{{ r.date }}</th><td class="num">{{ r.price|tr(a.dec) }}</td><td class="num">{{ chg(r.chg) }}</td></tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="prose">
+        <h2>Sık sorulan sorular</h2>
+        {% for q, ans in faq %}
+        <details>
+          <summary>{{ q }}</summary>
+          <p>{{ ans }}</p>
+        </details>
+        {% endfor %}
+      </section>
+    </div>
+
+    <aside class="side side--sticky" aria-label="Hesaplama ve diğer fiyatlar">
+      <div class="calc" data-calc data-price="{{ a.price }}">
+        <h2>Hızlı hesaplama</h2>
+        <label for="qty">Miktar ({{ a.qty }})</label>
+        <input id="qty" inputmode="decimal" autocomplete="off" value="1" data-in>
+        <p class="result" aria-live="polite"><span data-out>{{ a.price|tr(a.dec) }}</span> {{ a.unit }}</p>
+      </div>
+      <div class="card">
+        <h2>Diğer fiyatlar</h2>
+        <ul class="pills">
+          {% for s in same %}<li><a href="{{ u('/' ~ s.slug ~ '/') }}">{{ s.name }} <b>{{ s.price|tr(s.dec) }}</b></a></li>{% endfor %}
+          <li><a href="{{ u('/') }}">Tüm fiyatlar</a></li>
+        </ul>
+      </div>
+    </aside>
   </div>
-</section>
+</div>
 
-<div class="wrap">{{ ad('middle') }}</div>
-
-{% if rows %}
-<section class="wrap block">
-  <h2>Geçmiş {{ a.name }} fiyatları</h2>
-  <div class="table-scroll">
-    <table>
-      <thead><tr><th scope="col">Tarih</th><th scope="col" class="num">Fiyat ({{ a.unit }})</th><th scope="col" class="num">Değişim</th></tr></thead>
-      <tbody>
-      {% for r in rows %}
-        <tr><th scope="row">{{ r.date }}</th><td class="num">{{ r.price|tr(a.dec) }}</td><td class="num">{{ chg(r.chg) }}</td></tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</section>
-{% endif %}
-
-<section class="wrap block prose">
-  <h2>Sık sorulan sorular</h2>
-  {% for q, ans in faq %}
-  <details>
-    <summary>{{ q }}</summary>
-    <p>{{ ans }}</p>
-  </details>
-  {% endfor %}
-</section>
-
-<section class="wrap block">
-  <h2>Diğer fiyatlar</h2>
-  <ul class="pills">
-    {% for s in same %}<li><a href="{{ u('/' ~ s.slug ~ '/') }}">{{ s.name }} <b>{{ s.price|tr(s.dec) }}</b></a></li>{% endfor %}
-    <li><a href="{{ u('/') }}">Tüm fiyatlar</a></li>
-  </ul>
-</section>
-
-<div class="wrap">{{ ad('bottom') }}</div>
+<div class="shell">{{ ad('bottom') }}</div>
 {{ affiliates() }}
 {% endblock %}
