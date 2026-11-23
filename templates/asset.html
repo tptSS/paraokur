@@ -69,7 +69,7 @@
       <section class="prose">
         <h2>Sık sorulan sorular</h2>
         {% for q, ans in faq %}
-        <details>
+        <details class="disclosure">
           <summary>{{ q }}</summary>
           <p>{{ ans }}</p>
         </details>
@@ -82,7 +82,7 @@
         <h2>Hızlı hesaplama</h2>
         <label for="qty">Miktar ({{ a.qty }})</label>
         <input id="qty" inputmode="decimal" autocomplete="off" value="1" data-in>
-        <p class="result" aria-live="polite"><span data-out>{{ a.price|tr(a.dec) }}</span> {{ a.unit }}</p>
+        <p class="calc-out" aria-live="polite"><span data-out>{{ a.price|tr(a.dec) }}</span> {{ a.unit }}</p>
       </div>
       <div class="card">
         <h2>Diğer fiyatlar</h2>

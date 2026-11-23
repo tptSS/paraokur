@@ -14,7 +14,7 @@ __HEAD_EXTRA__
 <style>
 /* Renk, tema ve tipografi ortak sistemden (base.css); burada yalnızca bu sayfanın eski adları eşlenir. */
 :root{
-  --card:var(--surface); --chip:var(--tint); --deep:var(--band); --deep2:var(--band-2); --amber:var(--coin);
+  --card:var(--surface); --chip:var(--tint); --deep:var(--band); --deep2:var(--band-2); --amber:var(--band-hl);
   --good:var(--gain); --bad:var(--loss); --good-bg:var(--gain-bg); --bad-bg:var(--loss-bg);
   --hatch:rgba(255,255,255,.09);
 }
@@ -33,23 +33,22 @@ label{display:block;font-size:.86rem;color:var(--mute);margin:0 0 5px}
 .lede{color:var(--on-band-mute);margin:12px 0 0;max-width:52ch;font-size:1rem}
 .melt{margin-top:26px;background:var(--deep2);border-radius:14px;padding:18px}
 .melt-top{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.melt label{color:#9fb4a7}
-.melt input[type=text]{background:#0f1f1a;border-color:#2b4a41;color:#fff}
+.melt label{color:var(--on-band-mute)}
+.melt input[type=text]{background:var(--band);border-color:var(--band-line);color:#fff}
 .melt output{color:var(--amber);font-weight:700;margin-left:6px}
 input[type=range]{padding:0;height:44px;accent-color:var(--amber);background:transparent;border:0}
 .bar{position:relative;height:64px;border-radius:10px;overflow:hidden;margin-top:14px;
-  background:repeating-linear-gradient(135deg,var(--hatch) 0 8px,transparent 8px 16px),#0f1f1a;border:1px solid #2b4a41}
-.bar-fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:linear-gradient(90deg,#d9a92f,var(--amber));
-  border-radius:0 10px 10px 0;transition:width 1.5s cubic-bezier(.2,.7,.1,1)}
-.bar.quick .bar-fill{transition-duration:.35s}
-.bar-tag{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:#2a1f00;font-size:1.15rem;z-index:1}
+  background:var(--band);border:1px solid var(--band-line)}
+.bar-fill{position:absolute;left:0;top:0;bottom:0;width:100%;background:var(--amber);transform-origin:left}
+.bar.quick .bar-fill{transition-duration:0s}
+.bar-tag{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;color:#2a1230;font-size:1.15rem;z-index:1}
 .melt-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-.melt-nums small{display:block;color:#9fb4a7;font-size:.78rem;line-height:1.3}
+.melt-nums small{display:block;color:var(--on-band-mute);font-size:.78rem;line-height:1.3}
 .melt-nums strong{display:block;font-size:clamp(1.05rem,4.2vw,1.5rem);color:#fff}
-.melt-nums .loss{color:#ff9d94}
-.assump{font-size:.85rem;color:#9fb4a7;margin:16px 0 0}
-.assump input{display:inline-block;width:5.2em;padding:5px 8px;margin:0 3px;background:#0f1f1a;border-color:#2b4a41;color:#fff}
-.linkbtn{background:none;border:0;padding:0;color:var(--amber);text-decoration:underline;cursor:pointer;font-size:.85rem}
+.melt-nums .loss{color:var(--loss-d)}
+.assump{font-size:.85rem;color:var(--on-band-mute);margin:16px 0 0}
+.assump input{display:inline-block;width:5.2em;padding:5px 8px;margin:0 3px;background:var(--band);border-color:var(--band-line);color:#fff}
+.linkbtn{background:none;border:0;padding:0 8px;min-height:44px;min-width:44px;color:var(--amber);text-decoration:underline;cursor:pointer;font-size:.85rem}
 
 /* BÖLÜMLER */
 section.blk{padding:38px 0 0}
@@ -58,24 +57,24 @@ section.blk>.wrap>p.sub{color:var(--mute);margin:8px 0 0;max-width:60ch}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:16px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.chip{border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:.9rem;min-height:40px}
+.chip{border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:.9rem;min-height:44px}
 .chip[aria-pressed="true"]{background:var(--deep);color:var(--amber);border-color:var(--deep)}
 .stat{background:var(--chip);border-radius:10px;padding:12px 14px}
 .stat small{display:block;color:var(--mute);font-size:.8rem;line-height:1.3}
 .stat strong{font-size:1.2rem;display:block;margin-top:2px}
 .stat.hi{background:var(--deep);color:#fff}
-.stat.hi small{color:#9fb4a7} .stat.hi strong{color:var(--amber)}
+.stat.hi small{color:var(--on-band-mute)} .stat.hi strong{color:var(--amber)}
 .compare{margin-top:18px;display:grid;gap:10px}
 .crow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;font-size:.92rem}
 .crow .track{grid-column:1 / -1;height:16px;border-radius:8px;background:var(--chip);overflow:hidden}
-.crow .fill{height:100%;width:0;border-radius:8px;background:var(--deep);transition:width .9s cubic-bezier(.2,.7,.1,1)}
+.crow .fill{height:100%;width:100%;transform:scaleX(0);transform-origin:left;background:var(--deep)}
 .crow .fill.amber{background:var(--amber)} .crow .fill.red{background:var(--bad)} .crow .fill.green{background:var(--good)}
 .crow b{font-variant-numeric:tabular-nums}
 .verdict{margin:16px 0 0;padding:12px 14px;border-radius:10px;font-weight:600}
 .verdict.good{background:var(--good-bg);color:var(--good)} .verdict.bad{background:var(--bad-bg);color:var(--bad)}
 .note{color:var(--mute);font-size:.86rem;margin:12px 0 0}
 .form3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.src{display:inline-block;font-size:.76rem;border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin-left:6px;text-decoration:none;color:var(--mute);vertical-align:middle;white-space:nowrap}
+.src{display:inline-flex;align-items:center;min-height:44px;font-size:.76rem;border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin-left:6px;text-decoration:none;color:var(--mute);vertical-align:middle;white-space:nowrap}
 .src:hover{color:var(--ink);border-color:var(--mute)}
 
 /* Karşılaştırma kartları */
@@ -295,11 +294,11 @@ __SCRIPTS__
     var k=Math.pow(1+e,m/12), pp=A/k, need=A*k, share=100/k;
     var bar=$('bar');
     if(first){
-      $('fill').style.width='100%';
-      requestAnimationFrame(function(){requestAnimationFrame(function(){$('fill').style.width=share+'%'})});
+      $('fill').style.transform='scaleX(1)';
+      requestAnimationFrame(function(){requestAnimationFrame(function(){$('fill').style.transform='scaleX('+share/100+')'})});
       first=false; setTimeout(function(){bar.classList.add('quick')},1700);
     } else {
-      $('fill').style.width=share+'%';
+      $('fill').style.transform='scaleX('+share/100+')';
     }
     tween($('bar-tag'),share,function(v){return pct(v,0)});
     tween($('pp'),pp,TL); tween($('need'),need,TL); tween($('loss'),A-pp,function(v){return '-'+TL(v)});
@@ -325,7 +324,7 @@ __SCRIPTS__
     $('o-taxl').textContent='Stopaj (%'+f1.format(s*100)+')';
     tween($('o-gross'),gross,TL2); tween($('o-tax'),tax,TL2); tween($('o-net'),net,TL2); tween($('o-end'),end,TL2);
     var mx=Math.max(end,need);
-    $('c1').style.width=(end/mx*100)+'%'; $('c2').style.width=(need/mx*100)+'%';
+    $('c1').style.transform='scaleX('+end/mx+')'; $('c2').style.transform='scaleX('+need/mx+')';
     tween($('c1-v'),end,TL); tween($('c2-v'),need,TL);
     var g=net/P; depNetAnnual=(Math.pow(1+g,365/d)-1)*100;
     if(real>=0){v.className='verdict good';v.textContent='Bu varsayımla vade sonunda alım gücün yaklaşık '+pct(real,2)+' artar.'}
@@ -347,7 +346,7 @@ __SCRIPTS__
     var yr=(Math.pow(1+m,12)-1)*100, e=infl();
     tween($('k-m'),P*m,TL2); tween($('k-y'),yr,function(x){return pct(x,1)});
     var mx=Math.max(yr,POLICY,e,1);
-    $('b1').style.width=(yr/mx*100)+'%'; $('b2').style.width=(POLICY/mx*100)+'%'; $('b3').style.width=(e/mx*100)+'%';
+    $('b1').style.transform='scaleX('+yr/mx+')'; $('b2').style.transform='scaleX('+POLICY/mx+')'; $('b3').style.transform='scaleX('+e/mx+')';
     $('b1-v').textContent=pct(yr,1); $('b2-v').textContent=pct(POLICY,0); $('b3-v').textContent=pct(e,2);
     var txt='Bu oranla ödenmeyen '+TL(P)+' borç, bir yılda yaklaşık '+pct(yr,1)+' büyür (azami oran, bankan daha düşük uygulayabilir).';
     if(depNetAnnual!=null){

@@ -1,0 +1,15 @@
+{
+  "enflasyon": {"title": "Enflasyon", "text": "Fiyatların genel olarak yükselmesi. Enflasyon varken aynı para zamanla daha az şey alır; buna paranın alım gücünün düşmesi denir."},
+  "alim-gucu": {"title": "Alım gücü", "text": "Elindeki paranın ne kadar mal ve hizmet almaya yettiği. Fiyatlar yükselince aynı tutarla daha az şey alabilirsin, yani alım gücün düşer."},
+  "mevduat": {"title": "Mevduat", "text": "Bankaya, belirli bir süre ya da vadesiz olarak yatırdığın para. Banka bu paranın karşılığında sana faiz ödeyebilir."},
+  "vade": {"title": "Vade", "text": "Paranın bankada kalacağı süre ya da bir borcun ödeneceği tarih."},
+  "brut-net": {"title": "Brüt ve net", "text": "Brüt, vergi ve kesintiler düşülmeden önceki tutardır. Net, kesintilerden sonra gerçekte eline geçen tutardır."},
+  "stopaj": {"title": "Stopaj", "text": "Faiz kazancından devletin, faizi sana ödemeden önce kesip aldığı vergi. Bankanın yazdığı faizden stopaj çıkınca eline geçen net faiz kalır."},
+  "bilesik-faiz": {"title": "Bileşik faiz", "text": "Kazandığın faizin de bir sonraki dönem faiz kazanması. Faiz üzerine faiz işlediği için süre uzadıkça fark büyür."},
+  "akdi-faiz": {"title": "Akdi faiz", "text": "Kredi kartında, borcun son ödeme tarihinde ödenmeyen kısmına işleyen normal faiz. Bankaların uygulayabileceği en yüksek oranı Merkez Bankası açıklar."},
+  "politika-faizi": {"title": "Politika faizi", "text": "Merkez Bankası'nın belirlediği temel faiz oranı. Bankaların ve piyasadaki diğer faizlerin yönünü etkiler."},
+  "makas": {"title": "Makas", "text": "Bir şeyin alış fiyatı ile satış fiyatı arasındaki fark. Alıp hemen geri satsan bu farkı kaybedersin."},
+  "ons": {"title": "Ons", "text": "Altın ve gümüş gibi değerli madenlerde kullanılan ağırlık birimi; bir ons yaklaşık 31,1 gramdır. Altının dünya fiyatı ons başına dolar olarak verilir."},
+  "has-altin": {"title": "Has altın", "text": "Saf altın, yani 24 ayar. 22, 18 ve 14 ayarlı altınlarda altın başka madenlerle karıştırıldığı için gramında daha az saf altın bulunur."},
+  "tmsf": {"title": "TMSF", "text": "Tasarruf Mevduatı Sigorta Fonu. Bir banka batarsa mevduatını belirli bir limite kadar güvence altına alan kurum."}
+}

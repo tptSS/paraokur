@@ -6,7 +6,7 @@
 <title>{{ title }}</title>
 <meta name="description" content="{{ description }}">
 <link rel="canonical" href="{{ site }}{{ path }}">
-<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="robots" content="{{ robots|default('index,follow,max-image-preview:large') }}">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description }}">
@@ -34,6 +34,7 @@
 {% include "partials/footer.html" %}
 <script src="{{ u('/assets/site.js') }}?v={{ build_id }}"></script>
 <script src="{{ u('/assets/app.js') }}?v={{ build_id }}"></script>
+<script src="{{ u('/assets/ui.js') }}?v={{ build_id }}"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
